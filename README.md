@@ -1,5 +1,9 @@
 # harmonize
 
+> Under development!
+
+Convert Voice to Music!
+
 ## Installation:
 
 Make the installation scripts executable using:
