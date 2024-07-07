@@ -6,11 +6,14 @@ Convert Voice to Music!
 
 ## Installation:
 
-Make the installation scripts executable using:
+Clone the repository:
+
 ```bash
-chmod +x install_<replace_with_script_of_your_os>.sh
+git clone https://github.com/sreyasaju/harmonize.git
+cd harmonize
 ```
 
-- for Linux Distros run `./install_linux.sh`
-- for MacOS run `./install_macos.sh`
-
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
