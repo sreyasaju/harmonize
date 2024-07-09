@@ -7,7 +7,7 @@ format = pyaudio.paInt16
 channels = 1
 rate = 44100  # number of samples
 chunk = 1024 #  number of frames in the buffer
-record_seconds = 60
+record_seconds = 30
 wave_output_file = "file.wav"
 
 def record_audio():
@@ -44,7 +44,7 @@ def record_audio():
 
         print(f"Recording saved to {wave_output_file}")
 
-        subprocess.run(["python", "midi.py"])
+        subprocess.run(["python3", "midi.py"])
 
 if __name__ == "__main__":
     record_audio()
