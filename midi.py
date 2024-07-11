@@ -6,9 +6,11 @@ from mido import Message, MidiFile, MidiTrack
 wave_output_file = "file.wav"
 midi_output = "output.mid"
 
+
 # function to convert frequency to MIDI note
 def freq_to_midi(freq):
     return int(librosa.hz_to_midi(freq))
+
 
 def midi_to_alphabet(midi_note):
     note_mapping = {
@@ -21,7 +23,7 @@ def midi_to_alphabet(midi_note):
         66: 'F#4', 67: 'G4', 68: 'G#4', 69: 'A4', 70: 'A#4',
         71: 'B4', 72: 'C5', 73: 'C#5', 74: 'D5', 75: 'D#5',
         76: 'E5', 77: 'F5', 78: 'F#5', 79: 'G5', 80: 'G#5',
-        81: 'A5', 82: 'A#5', 83: 'B5',84: 'C6', 85: 'C#6',
+        81: 'A5', 82: 'A#5', 83: 'B5', 84: 'C6', 85: 'C#6',
         86: 'D6', 87: 'D#6', 88: 'E6', 89: 'F6', 90: 'F#6',
         91: 'G6', 92: 'G#6', 93: 'A6', 94: 'A#6', 95: 'B6',
         96: 'C7'
@@ -33,8 +35,12 @@ def midi_to_alphabet(midi_note):
         return None
 
 
-def convert_to_midi():
+def convert_to_midi(silence_threshold=-40.0):
     signal, sr = librosa.load(wave_output_file, sr=None)
+
+    # Calculate the RMS energy of the signal
+    rms = librosa.feature.rms(y=signal, frame_length=2048, hop_length=512)
+    rms_db = librosa.amplitude_to_db(rms, ref=np.max)
 
     # using librosa.pyin for pitch detection
     fmin = librosa.note_to_hz('C2')
@@ -47,21 +53,44 @@ def convert_to_midi():
     midi_file.tracks.append(track)
 
     time_counter = 0
+    hop_length = 512
+    ticks_per_beat = midi_file.ticks_per_beat
+    tempo = 500000  # tempo in microseconds per beat (120 BPM)
+    ticks_per_second = (ticks_per_beat * 1000000) // tempo
 
-    voiced_pitches = pitches[voiced_flags]  # remove the unvoiced frames
-    for pitch in voiced_pitches:
-        midi_note = freq_to_midi(pitch)
-        midi_msg = Message('note_on', note=midi_note, velocity=64, time=time_counter)
-        track.append(midi_msg)
+    last_pitch = None
+    last_time = 0
 
-        alphabet = midi_to_alphabet(midi_note)
-        if alphabet:
-            print(f"Pitch: {pitch:.2f}, MIDI Note: {alphabet}")
-        else:
-            print(f"No alphabet mapping found for MIDI Note {midi_note}")
-        time_counter += 1
+    for i, (pitch, voiced_flag) in enumerate(zip(pitches, voiced_flags)):
+        rms_value = rms_db[0][i]
+        if voiced_flag and rms_value > silence_threshold:
+            midi_note = freq_to_midi(pitch)
+            current_time = int((i * hop_length) / sr * ticks_per_second)
 
-    # Save the MIDI file
+            # Debug statement: Print current pitch and time
+            print(f"Index: {i}, Pitch: {pitch}, RMS Value: {rms_value}, MIDI Note: {midi_note}, Current Time: {current_time}")
+
+            if last_pitch is not None and last_pitch != midi_note:
+                # Note off for the previous note
+                track.append(Message('note_off', note=last_pitch, velocity=64, time=current_time - last_time))
+                last_time = current_time
+
+            # Note on for the current note
+            track.append(Message('note_on', note=midi_note, velocity=64, time=current_time - last_time))
+            last_pitch = midi_note
+            last_time = current_time
+
+            alphabet = midi_to_alphabet(midi_note)
+            if alphabet:
+                print(f"Pitch: {pitch:.2f}, MIDI Note: {alphabet}")
+            else:
+                print(f"No alphabet mapping found for MIDI Note {midi_note}")
+
+        # Note off for the last note
+    if last_pitch is not None:
+        track.append(Message('note_off', note=last_pitch, velocity=64, time=0))
+
+        # Save the MIDI file
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
 
