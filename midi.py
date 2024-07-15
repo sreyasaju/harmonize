@@ -52,7 +52,6 @@ def convert_to_midi(silence_threshold=-40.0):
     track = MidiTrack()
     midi_file.tracks.append(track)
 
-    time_counter = 0
     hop_length = 512
     ticks_per_beat = midi_file.ticks_per_beat
     tempo = 500000  # tempo in microseconds per beat (120 BPM)
@@ -69,12 +68,13 @@ def convert_to_midi(silence_threshold=-40.0):
 
             if last_pitch is not None and last_pitch != midi_note:
                 # Note off for the previous note
-                track.append(Message('note_off', note=last_pitch, velocity=64, time=current_time - last_time))
+                duration = current_time - last_time
+                track.append(Message('note_off', note=last_pitch, velocity=64, time=duration))
                 last_time = current_time
 
             # Note on for the current note
             if last_pitch != midi_note:
-                track.append(Message('note_on', note=midi_note, velocity=64, time=current_time - last_time))
+                track.append(Message('note_on', note=midi_note, velocity=64, time=0))
                 last_pitch = midi_note
                 last_time = current_time
 
