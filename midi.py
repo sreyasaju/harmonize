@@ -67,24 +67,22 @@ def convert_to_midi(silence_threshold=-40.0):
             midi_note = freq_to_midi(pitch)
             current_time = int((i * hop_length) / sr * ticks_per_second)
 
-            # Debug statement: Print current pitch and time
-            print(f"Index: {i}, Pitch: {pitch}, RMS Value: {rms_value}, MIDI Note: {midi_note}, Current Time: {current_time}")
-
             if last_pitch is not None and last_pitch != midi_note:
                 # Note off for the previous note
                 track.append(Message('note_off', note=last_pitch, velocity=64, time=current_time - last_time))
                 last_time = current_time
 
             # Note on for the current note
-            track.append(Message('note_on', note=midi_note, velocity=64, time=current_time - last_time))
-            last_pitch = midi_note
-            last_time = current_time
+            if last_pitch != midi_note:
+                track.append(Message('note_on', note=midi_note, velocity=64, time=current_time - last_time))
+                last_pitch = midi_note
+                last_time = current_time
 
-            alphabet = midi_to_alphabet(midi_note)
-            if alphabet:
-                print(f"Pitch: {pitch:.2f}, MIDI Note: {alphabet}")
-            else:
-                print(f"No alphabet mapping found for MIDI Note {midi_note}")
+                alphabet = midi_to_alphabet(midi_note)
+                if alphabet:
+                    print(f"Pitch: {pitch:.2f}, MIDI Note: {alphabet}")
+                else:
+                    print(f"No alphabet mapping found for MIDI Note {midi_note}")
 
         # Note off for the last note
     if last_pitch is not None:
