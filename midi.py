@@ -2,10 +2,8 @@ import numpy as np
 import librosa
 from mido import Message, MidiFile, MidiTrack
 
-
 wave_output_file = "file.wav"
 midi_output = "output.mid"
-
 
 # function to convert frequency to MIDI note
 def freq_to_midi(freq):
