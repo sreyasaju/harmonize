@@ -1,5 +1,5 @@
-import numpy as np
 import librosa
+import numpy as np
 from mido import Message, MidiFile, MidiTrack
 
 wave_output_file = "file.wav"
