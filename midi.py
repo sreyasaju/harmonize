@@ -2,13 +2,9 @@ import librosa
 import numpy as np
 from mido import Message, MidiFile, MidiTrack
 
-wave_output_file = "file.wav"
-midi_output = "output.mid"
-
 # function to convert frequency to MIDI note
 def freq_to_midi(freq):
     return int(librosa.hz_to_midi(freq))
-
 
 def midi_to_alphabet(midi_note):
     note_mapping = {
@@ -82,11 +78,11 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
                 else:
                     print(f"No alphabet mapping found for MIDI Note {midi_note}")
 
-        # Note off for the last note
+     # Note off for the last note
     if last_pitch is not None:
         track.append(Message('note_off', note=last_pitch, velocity=64, time=0))
 
-        # Save the MIDI file
+    # Save the MIDI file
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
 

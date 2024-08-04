@@ -1,6 +1,6 @@
 from record import record_audio
 from midi import convert_to_midi
-from playback import play_wav_file, play_midi_file
+from playback import play_wav_file
 
 def main_menu():
     wave_output_file = None
