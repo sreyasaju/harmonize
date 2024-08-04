@@ -33,7 +33,7 @@ def midi_to_alphabet(midi_note):
         return None
 
 
-def convert_to_midi(silence_threshold=-40.0):
+def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     signal, sr = librosa.load(wave_output_file, sr=None)
 
     # Calculate the RMS energy of the signal
@@ -90,6 +90,3 @@ def convert_to_midi(silence_threshold=-40.0):
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
 
-
-if __name__ == "__main__":
-    convert_to_midi()

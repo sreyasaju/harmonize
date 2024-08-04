@@ -1,51 +1,40 @@
-import pyaudio
-import subprocess
-import wave
+from record import record_audio
+from midi import convert_to_midi
+from playback import play_wav_file, play_midi_file
 
-# parameters
-format = pyaudio.paInt16
-channels = 1
-rate = 44100  # number of samples
-chunk = 1024 #  number of frames in the buffer
-record_seconds = 300
-wave_output_file = "file.wav"
+def main_menu():
+    wave_output_file = None
+    midi_output = None
 
-def record_audio():
-    audio = pyaudio.PyAudio()
-    stream = audio.open(format=format,
-                    channels=channels,
-                    rate=rate,
-                    input=True,
-                    frames_per_buffer=chunk)
-    print("Recording..")
-    frames = []
+    while True:
+        print("\n Voice to MIDI Converter")
+        print("1. Record your Voice!")
+        print("2. Play Recorded Voice")
+        print("3. Convert Audio to MIDI")
+        print("4. Exit")
 
-    try:
-        for i in range(0, int(rate/chunk*record_seconds)):
-            data = stream.read(chunk)  # read no. of frames from audio stream
-            frames.append(data)
-            # appends data to the frame list
-        print("Recording Finished...")
+        choice = input("Enter your choice (1-5): ")
 
-    except KeyboardInterrupt:
-        print("Recording interrupted...")
-
-    finally:
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()
-
-
-        waveFile = wave.open(wave_output_file, 'wb')
-        waveFile.setnchannels(channels)
-        waveFile.setsampwidth(audio.get_sample_size(format))
-        waveFile.setframerate(rate)
-        waveFile.writeframes(b''.join(frames))
-        waveFile.close()
-
-        print(f"Recording saved to {wave_output_file}")
-
-        subprocess.run(["python3", "midi.py"])
+        if choice == '1':
+            record_seconds = int(input("Enter the duration for recording (in seconds): "))
+            wave_output_file = input("Enter output filename (e.g., recording.wav): ")
+            record_audio(record_seconds, wave_output_file)
+        elif choice == '2':
+            if wave_output_file is None:
+                print("No recorded audio file available!")
+                continue
+            play_wav_file(wave_output_file)
+        elif choice == '3':
+            if wave_output_file is None:
+                print("You need to record audio first!")
+                continue
+            midi_output = input("Enter output MIDI filename (e.g., output.midi): ")
+            convert_to_midi(wave_output_file, midi_output)
+        elif choice == '4':
+            print("Exiting Program.")
+            break
+        else:
+            print("Invalid choice!")
 
 if __name__ == "__main__":
-    record_audio()
+    main_menu()
