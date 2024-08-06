@@ -28,16 +28,16 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         font.family: "Tahoma"
-        anchors.verticalCenterOffset: -333
-        anchors.horizontalCenterOffset: 9
+        anchors.verticalCenterOffset: -346
+        anchors.horizontalCenterOffset: 1
         font.styleName: "Medium"
         anchors.centerIn: parent
     }
 
     Frame {
         id: recordFrame
-        x: 93
-        y: 222
+        x: 110
+        y: 214
         width: 1062
         height: 185
         data: [
@@ -51,9 +51,9 @@ Rectangle {
 
         Rectangle {
             id: rectangle1
-            x: -37
+            x: -12
             y: -20
-            width: 1108
+            width: 1068
             height: 200
             color: "#080817"
         }
@@ -86,7 +86,7 @@ Rectangle {
                 width: 170
                 height: 86
                 color: "#d2d2ff"
-                font.pixelSize: 44
+                font.pixelSize: 26
                 verticalAlignment: Text.AlignVCenter
                 padding: 4
                 rightPadding: 4
@@ -115,9 +115,9 @@ Rectangle {
 
     Rectangle {
         id: savefilenameLabel
-        x: 693
+        x: 711
         y: 443
-        width: 168
+        width: 184
         height: 87
         color: "#7c1ec3"
         radius: 17
@@ -133,11 +133,12 @@ Rectangle {
             textFormat: Text.RichText
         }
 
+
         Rectangle {
             id: rectangle4
-            x: 129
+            x: 153
             y: 0
-            width: 334
+            width: 310
             height: 87
             color: "#00ffffff"
             radius: 16
@@ -145,14 +146,15 @@ Rectangle {
             border.width: 5
         }
 
+
         TextInput {
             id: textInput1
-            x: 170
-            y: 1
-            width: 294
-            height: 86
+            x: 195
+            y: 0
+            width: 268
+            height: 87
             color: "#d2d2ff"
-            font.pixelSize: 44
+            font.pixelSize: 26
             verticalAlignment: Text.AlignVCenter
             topPadding: 4
             selectionColor: "#6666a0"
@@ -163,16 +165,27 @@ Rectangle {
             cursorVisible: true
             bottomPadding: 4
         }
-
     }
 
     RoundButton {
         id: roundButton
-        x: 578
-        y: 441
-        width: 92
-        height: 92
+        x: 586
+        y: 443
+        width: 86
+        height: 90
         text: "+"
+        icon.source: "images/mic.png"
+        icon.height: 69
+        icon.width: 69
+        display: AbstractButton.IconOnly
+        palette {
+            button: "#642bab"
+            buttonText: "white"
+        }
+
+        DesignEffect {
+            layerBlurRadius: 0
+        }
     }
 
 
