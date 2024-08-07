@@ -10,36 +10,40 @@ import QtQuick.Controls 6.5
 import UI
 import QtQuick.Studio.DesignEffects
 import QtQuick.Studio.Components 1.0
+import QtQuick.Timeline 1.0
+import QtQuick.Layouts
 
 Rectangle {
     id: rectangle
-    width: Constants.width
-    height: Constants.height
+    width: 1280
+    height: 720
+    opacity: 1
     color: "#151524"
+    radius: 5
 
 
     Text {
         id: harmonize
-        width: 465
-        height: 121
+        width: 449
+        height: 106
         color: "#ffffff"
         text: qsTr("harmonize")
-        font.pixelSize: 85
+        font.pixelSize: 75
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         font.family: "Tahoma"
-        anchors.verticalCenterOffset: -346
-        anchors.horizontalCenterOffset: 1
+        anchors.verticalCenterOffset: -267
+        anchors.horizontalCenterOffset: -5
         font.styleName: "Medium"
         anchors.centerIn: parent
     }
 
     Frame {
         id: recordFrame
-        x: 110
-        y: 214
-        width: 1062
-        height: 185
+        x: 99
+        y: 152
+        width: 1060
+        height: 163
         data: [
             DesignEffect {
                 effects: [
@@ -52,17 +56,17 @@ Rectangle {
         Rectangle {
             id: rectangle1
             x: -12
-            y: -20
+            y: -12
             width: 1068
-            height: 200
+            height: 168
             color: "#080817"
         }
     }
 
     Rectangle {
         id: recordDurationLabel
-        x: 110
-        y: 426
+        x: 99
+        y: 335
         width: 263
         height: 87
         color: "#7c1ec3"
@@ -115,8 +119,8 @@ Rectangle {
 
     Rectangle {
         id: savefilenameLabel
-        x: 707
-        y: 426
+        x: 695
+        y: 335
         width: 184
         height: 87
         color: "#7c1ec3"
@@ -169,8 +173,8 @@ Rectangle {
 
     RoundButton {
         id: roundButton
-        x: 585
-        y: 425
+        x: 569
+        y: 335
         width: 86
         height: 90
         text: "+"
@@ -186,12 +190,17 @@ Rectangle {
         DesignEffect {
             layerBlurRadius: 0
         }
+
+        Connections {
+            target: roundButton
+            onClicked: rectangle.state = ""
+        }
     }
 
     Frame {
         id: recordFrame1
-        x: 110
-        y: 615
+        x: 91
+        y: 504
         width: 1062
         height: 185
         data: [
@@ -202,8 +211,8 @@ Rectangle {
             }]
         Rectangle {
             id: rectangle2
-            x: -12
-            y: -21
+            x: -13
+            y: -20
             width: 1068
             height: 200
             color: "#080817"
@@ -212,8 +221,8 @@ Rectangle {
 
     Text {
         id: text3
-        x: 110
-        y: 566
+        x: 99
+        y: 449
         color: "#4a4a7f"
         text: qsTr("MIDI Output")
         font.pixelSize: 25
@@ -222,8 +231,8 @@ Rectangle {
 
     Rectangle {
         id: savefilenameLabel1
-        x: 403
-        y: 827
+        x: 376
+        y: 739
         width: 184
         height: 87
         color: "#7c1ec3"
@@ -271,6 +280,10 @@ Rectangle {
             bottomPadding: 4
         }
     }
+
+    GroupItem {
+    }
+
 
 
 }
