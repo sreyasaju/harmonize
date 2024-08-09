@@ -193,7 +193,12 @@ Rectangle {
 
         Connections {
             target: roundButton
-            onClicked: rectangle.state = ""
+            onPressed: rectangle.state = "stop"
+        }
+
+        Connections {
+            target: roundButton
+            onReleased: rectangle.state = ""
         }
     }
 
@@ -283,6 +288,17 @@ Rectangle {
 
     GroupItem {
     }
+    states: [
+        State {
+            name: "stop"
+
+            PropertyChanges {
+                target: roundButton
+                text: "+"
+                icon.source: "../stop.png"
+            }
+        }
+    ]
 
 
 
