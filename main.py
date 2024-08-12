@@ -4,7 +4,6 @@ from playback import play_wav_file
 
 def main_menu():
     wave_output_file = None
-    midi_output = None
 
     while True:
         print("\n Voice to MIDI Converter")
