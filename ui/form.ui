@@ -29,65 +29,18 @@
    <locale language="English" country="UnitedStates"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>130</y>
-      <width>141</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Record Parameters: </string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>160</y>
-      <width>181</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>15</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-radius:5px;
-background-color: #45259b</string>
-    </property>
-    <property name="text">
-     <string>Duration (in seconds):</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-    </property>
-    <property name="margin">
-     <number>10</number>
-    </property>
-   </widget>
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>90</y>
+      <x>70</x>
+      <y>130</y>
       <width>341</width>
-      <height>351</height>
+      <height>331</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #12131e</string>
+     <string notr="true">background-color: #12131e;
+border-radius: 5px</string>
     </property>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
@@ -167,7 +120,7 @@ border-radius: 5px;
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>220</y>
+       <y>210</y>
        <width>141</width>
        <height>21</height>
       </rect>
@@ -186,7 +139,7 @@ border-radius: 5px;
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>250</y>
+       <y>240</y>
        <width>111</width>
        <height>41</height>
       </rect>
@@ -231,7 +184,7 @@ border-radius: 5px;
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>250</y>
+       <y>240</y>
        <width>181</width>
        <height>41</height>
       </rect>
@@ -256,62 +209,113 @@ background-color: #45259b</string>
       <number>10</number>
      </property>
     </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>70</y>
+       <width>181</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius:5px;
+background-color: #45259b</string>
+     </property>
+     <property name="text">
+      <string>Duration (in seconds):</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+     <property name="margin">
+      <number>10</number>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>70</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="cursor" stdset="0">
+      <cursorShape>IBeamCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 3px solid #45259b;
+border-radius: 5px;
+</string>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::InputMethodHint::ImhNone</set>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
+     </property>
+     <property name="placeholderText">
+      <string>60</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>40</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Record Parameters: </string>
+     </property>
+    </widget>
     <zorder>label_3</zorder>
     <zorder>textEdit_2</zorder>
     <zorder>label_5</zorder>
     <zorder>label_4</zorder>
     <zorder>textEdit_3</zorder>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>160</y>
-      <width>111</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>15</pointsize>
-     </font>
-    </property>
-    <property name="cursor" stdset="0">
-     <cursorShape>IBeamCursor</cursorShape>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 3px solid #45259b;
-border-radius: 5px;
-</string>
-    </property>
-    <property name="inputMethodHints">
-     <set>Qt::InputMethodHint::ImhNone</set>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-    </property>
-    <property name="sizeAdjustPolicy">
-     <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
-    </property>
-    <property name="placeholderText">
-     <string>60</string>
-    </property>
+    <zorder>label_2</zorder>
+    <zorder>textEdit</zorder>
+    <zorder>label</zorder>
    </widget>
    <widget class="QToolButton" name="toolButton">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>320</y>
+      <x>530</x>
+      <y>340</y>
       <width>101</width>
       <height>101</height>
      </rect>
@@ -323,12 +327,18 @@ background-color: #45259b;</string>
     <property name="text">
      <string/>
     </property>
+    <property name="icon">
+     <iconset theme="QIcon::ThemeIcon::AudioInputMicrophone"/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>60</width>
+      <height>60</height>
+     </size>
+    </property>
    </widget>
    <zorder>widget</zorder>
-   <zorder>label</zorder>
    <zorder>verticalLayoutWidget</zorder>
-   <zorder>label_2</zorder>
-   <zorder>textEdit</zorder>
    <zorder>toolButton</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
