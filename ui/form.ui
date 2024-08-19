@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>829</width>
+    <height>572</height>
    </rect>
   </property>
   <property name="font">
@@ -240,8 +240,8 @@ border-radius: 5px;
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>360</y>
+      <x>550</x>
+      <y>350</y>
       <width>101</width>
       <height>101</height>
      </rect>
@@ -277,10 +277,10 @@ background-color: #45259b;</string>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>170</y>
-      <width>301</width>
-      <height>181</height>
+      <x>420</x>
+      <y>120</y>
+      <width>351</width>
+      <height>211</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -293,8 +293,8 @@ background-color: #45259b;</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>380</y>
+      <x>460</x>
+      <y>370</y>
       <width>71</width>
       <height>71</height>
      </rect>

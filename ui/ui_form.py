@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 552)
         font = QFont()
         font.setFamilies([u"Ubuntu"])
         font.setPointSize(14)
@@ -100,7 +100,7 @@ class Ui_MainWindow(object):
 "")
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(530, 380, 101, 101))
+        self.pushButton.setGeometry(QRect(520, 360, 101, 101))
         self.pushButton.setStyleSheet(u"border-radius: 50px;\n"
 "background-color: #45259b;")
         icon = QIcon()
@@ -112,9 +112,20 @@ class Ui_MainWindow(object):
         self.pushButton.setChecked(False)
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
-        self.frame.setGeometry(QRect(430, 170, 301, 181))
+        self.frame.setGeometry(QRect(420, 120, 311, 211))
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.pushButton_2 = QPushButton(self.centralwidget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setGeometry(QRect(430, 370, 71, 71))
+        self.pushButton_2.setStyleSheet(u"border-radius: 35px;\n"
+"background-color: #45259b;")
+        icon1 = QIcon()
+        icon1.addFile(u"icons/play.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.pushButton_2.setIcon(icon1)
+        self.pushButton_2.setIconSize(QSize(50, 50))
+        self.pushButton_2.setCheckable(True)
+        self.pushButton_2.setChecked(False)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -144,5 +155,9 @@ class Ui_MainWindow(object):
         self.pushButton.setStatusTip("")
 #endif // QT_CONFIG(statustip)
         self.pushButton.setText("")
+#if QT_CONFIG(statustip)
+        self.pushButton_2.setStatusTip("")
+#endif // QT_CONFIG(statustip)
+        self.pushButton_2.setText("")
     # retranslateUi
 
