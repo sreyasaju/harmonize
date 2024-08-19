@@ -5,5 +5,5 @@ __pycache__/
 venv/
 .idea/
 
-ui/UI/Generated
-ui/UI/UI
+ui/.qtcreator
+ui/ui.pyproject.user
