@@ -17,7 +17,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>harmonize</string>
   </property>
   <property name="whatsThis">
    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;harmonize&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -28,12 +28,15 @@
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QWidget" name="settings" native="true">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>130</y>
+      <x>40</x>
+      <y>110</y>
       <width>341</width>
       <height>331</height>
      </rect>
@@ -42,7 +45,7 @@
      <string notr="true">background-color: #12131e;
 border-radius: 5px</string>
     </property>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="save_voice_label">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -70,56 +73,8 @@ background-color: #45259b</string>
      <property name="margin">
       <number>10</number>
      </property>
-     <property name="buddy">
-      <cstring>textEdit_2</cstring>
-     </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit_2">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>130</y>
-       <width>111</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Ubuntu</family>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="cursor" stdset="0">
-      <cursorShape>IBeamCursor</cursorShape>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 3px solid #45259b;
-border-radius: 5px;
-</string>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::InputMethodHint::ImhNone</set>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
-     </property>
-     <property name="placeholderText">
-      <string>voice.wav</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="midi_header">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -138,52 +93,7 @@ border-radius: 5px;
       <string>MIDI File: </string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit_3">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>240</y>
-       <width>111</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Ubuntu</family>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="cursor" stdset="0">
-      <cursorShape>IBeamCursor</cursorShape>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 3px solid #45259b;
-border-radius: 5px;
-</string>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::InputMethodHint::ImhNone</set>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
-     </property>
-     <property name="placeholderText">
-      <string>output.midi</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="save_MIDI_label">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -203,7 +113,7 @@ border-radius: 5px;
 background-color: #45259b</string>
      </property>
      <property name="text">
-      <string>Save Voice As:</string>
+      <string>Save MIDI As:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -211,11 +121,8 @@ background-color: #45259b</string>
      <property name="margin">
       <number>10</number>
      </property>
-     <property name="buddy">
-      <cstring>textEdit_3</cstring>
-     </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="duration_label">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -243,56 +150,8 @@ background-color: #45259b</string>
      <property name="margin">
       <number>10</number>
      </property>
-     <property name="buddy">
-      <cstring>textEdit</cstring>
-     </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>70</y>
-       <width>111</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Ubuntu</family>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="cursor" stdset="0">
-      <cursorShape>IBeamCursor</cursorShape>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 3px solid #45259b;
-border-radius: 5px;
-</string>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::InputMethodHint::ImhNone</set>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
-     </property>
-     <property name="placeholderText">
-      <string>60</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="record_parameters_header">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -311,23 +170,84 @@ border-radius: 5px;
       <string>Record Parameters: </string>
      </property>
     </widget>
-    <zorder>label_3</zorder>
-    <zorder>textEdit_2</zorder>
-    <zorder>label_5</zorder>
-    <zorder>label_4</zorder>
-    <zorder>textEdit_3</zorder>
-    <zorder>label_2</zorder>
-    <zorder>textEdit</zorder>
-    <zorder>label</zorder>
+    <widget class="QLineEdit" name="duration_field">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>70</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 3px solid #45259b;
+border-radius: 5px;
+
+</string>
+     </property>
+     <property name="maxLength">
+      <number>7200</number>
+     </property>
+     <property name="placeholderText">
+      <string>60</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="save_voice_label_2">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>130</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 3px solid #45259b;
+border-radius: 5px;
+
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>voice.wav</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="save_midi_label">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>240</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 3px solid #45259b;
+border-radius: 5px;
+
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>output.midi</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>340</y>
+      <x>530</x>
+      <y>360</y>
       <width>101</width>
       <height>101</height>
      </rect>
+    </property>
+    <property name="statusTip">
+     <string/>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius: 50px;
@@ -354,26 +274,61 @@ background-color: #45259b;</string>
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>170</y>
+      <width>301</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>380</y>
+      <width>71</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-radius: 35px;
+background-color: #45259b;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>icons/play.svg</normaloff>icons/play.svg</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>50</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>windowIconChanged(QIcon)</signal>
-   <receiver>pushButton</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>580</x>
-     <y>390</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>390</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
