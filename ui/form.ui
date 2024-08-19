@@ -70,6 +70,9 @@ background-color: #45259b</string>
      <property name="margin">
       <number>10</number>
      </property>
+     <property name="buddy">
+      <cstring>textEdit_2</cstring>
+     </property>
     </widget>
     <widget class="QTextEdit" name="textEdit_2">
      <property name="geometry">
@@ -208,6 +211,9 @@ background-color: #45259b</string>
      <property name="margin">
       <number>10</number>
      </property>
+     <property name="buddy">
+      <cstring>textEdit_3</cstring>
+     </property>
     </widget>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
@@ -236,6 +242,9 @@ background-color: #45259b</string>
      </property>
      <property name="margin">
       <number>10</number>
+     </property>
+     <property name="buddy">
+      <cstring>textEdit</cstring>
      </property>
     </widget>
     <widget class="QTextEdit" name="textEdit">
@@ -311,10 +320,10 @@ border-radius: 5px;
     <zorder>textEdit</zorder>
     <zorder>label</zorder>
    </widget>
-   <widget class="QToolButton" name="toolButton">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>550</x>
       <y>340</y>
       <width>101</width>
       <height>101</height>
@@ -328,7 +337,9 @@ background-color: #45259b;</string>
      <string/>
     </property>
     <property name="icon">
-     <iconset theme="QIcon::ThemeIcon::AudioInputMicrophone"/>
+     <iconset>
+      <normaloff>icons/mic.svg</normaloff>
+      <normalon>icons/stop.svg</normalon>icons/mic.svg</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -336,13 +347,33 @@ background-color: #45259b;</string>
       <height>60</height>
      </size>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
    </widget>
-   <zorder>widget</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>toolButton</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>windowIconChanged(QIcon)</signal>
+   <receiver>pushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>580</x>
+     <y>390</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>580</x>
+     <y>390</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
