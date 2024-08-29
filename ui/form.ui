@@ -100,6 +100,9 @@
          <height>41</height>
         </rect>
        </property>
+       <property name="statusTip">
+        <string>Checkout the git repo! https://github.com/sreyasaju/harmonize</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-radius: 5px;
 background-color: #45259b;</string>
