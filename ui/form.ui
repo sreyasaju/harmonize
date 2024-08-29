@@ -36,8 +36,8 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item row="1" column="0">
+     <widget class="QLabel" name="title">
       <property name="font">
        <font>
         <family>Ubuntu</family>
@@ -51,7 +51,7 @@
        <enum>QFrame::Shadow::Plain</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;harmonize&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Copyright © 2024 Sreya Saju&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Licensed under MIT license&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;harmonize&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Copyright © 2024 Sreya Saju&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Licensed under MIT license&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -59,6 +59,68 @@
       <property name="margin">
        <number>10</number>
       </property>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="QWidget" name="widget" native="true">
+      <widget class="QLabel" name="about">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>10</y>
+         <width>381</width>
+         <height>91</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Ubuntu</family>
+         <pointsize>48</pointsize>
+        </font>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Plain</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Convert your voice to MIDI&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Set the parameters and start recording!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+       <property name="margin">
+        <number>10</number>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="gitbutton">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>100</y>
+         <width>41</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 5px;
+background-color: #45259b;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/github.svg</normaloff>icons/github.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
      </widget>
     </item>
     <item row="3" column="0" rowspan="2">
@@ -315,7 +377,7 @@ background-color: #45259b</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>Enter the filenam eto save the MIDI output, and don't forget the extension! e.g., output.midi</string>
+         <string>Enter the filename to save the MIDI output, and don't forget the extension! e.g., output.midi</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border: 3px solid #45259b;
@@ -342,7 +404,7 @@ border-radius: 5px;
      </widget>
     </item>
     <item row="3" column="1" rowspan="2">
-     <widget class="QFrame" name="frame_5">
+     <widget class="QFrame" name="recordFrame">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -367,7 +429,7 @@ border-radius: 5px;
       <property name="frameShadow">
        <enum>QFrame::Shadow::Plain</enum>
       </property>
-      <widget class="QFrame" name="frame">
+      <widget class="QFrame" name="waveframe">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -393,6 +455,9 @@ border-radius: 5px;
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_6">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>310</x>
@@ -445,7 +510,7 @@ background-color: #45259b;</string>
         <string notr="true">buttonGroup</string>
        </attribute>
       </widget>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="convertButton">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -497,7 +562,10 @@ background-color: #45259b;</string>
         <string notr="true">buttonGroup</string>
        </attribute>
       </widget>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="playButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>110</x>
@@ -552,71 +620,6 @@ background-color: #45259b;</string>
        </attribute>
       </widget>
      </widget>
-    </item>
-    <item row="0" column="1" rowspan="2">
-     <widget class="QWidget" name="widget" native="true">
-      <widget class="QLabel" name="label_2">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>10</y>
-         <width>381</width>
-         <height>91</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>48</pointsize>
-        </font>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Shadow::Plain</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Convert your voice to MIDI&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Set the parameters and start recording!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-       </property>
-       <property name="margin">
-        <number>10</number>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>100</y>
-         <width>41</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-radius: 5px;
-background-color: #45259b;</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>icons/github.svg</normaloff>icons/github.svg</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>25</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QWidget" name="widget_2" native="true"/>
     </item>
    </layout>
   </widget>
