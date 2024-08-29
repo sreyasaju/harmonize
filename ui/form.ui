@@ -82,7 +82,7 @@
         <enum>QFrame::Shadow::Plain</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Convert your voice to MIDI&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Set the parameters and start recording!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Transform your voice to MIDI&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Set the parameters and start recording!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -229,6 +229,9 @@ background-color: #45259b</string>
         <property name="toolTip">
          <string>Enter the filename to save your voice recording, don't forget the extension! e.g., voice.wav</string>
         </property>
+        <property name="statusTip">
+         <string>Enter filename to save recording, with &quot;.wav&quot; extension</string>
+        </property>
         <property name="styleSheet">
          <string notr="true">border: 3px solid #45259b;
 border-radius: 5px;
@@ -288,6 +291,9 @@ border-radius: 5px;
         </property>
         <property name="toolTip">
          <string>Enter recording duration in seconds, e.g., 60</string>
+        </property>
+        <property name="statusTip">
+         <string>Enter the duration in seconds.</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border: 3px solid #45259b;
@@ -381,6 +387,9 @@ background-color: #45259b</string>
         </property>
         <property name="toolTip">
          <string>Enter the filename to save the MIDI output, and don't forget the extension! e.g., output.midi</string>
+        </property>
+        <property name="statusTip">
+         <string>Enter filename to save the midi file, with &quot;.midi&quot; extension</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border: 3px solid #45259b;
