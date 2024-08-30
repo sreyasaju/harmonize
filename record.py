@@ -1,7 +1,7 @@
 import pyaudio
 import wave
+import threading
 
-# Define audio parameters
 format = pyaudio.paInt16
 channels = 1
 rate = 44100
@@ -13,15 +13,21 @@ class RecordAudio:
         self.stream = None
         self.frames = []
         self.recording = False
+        self.wave_output_file = None
+        self.record_thread = None
 
     def start_recording(self, wave_output_file):
         if self.recording:
-            return  # recording
+            return
 
         self.recording = True
         self.frames = []
         self.wave_output_file = wave_output_file
 
+        self.record_thread = threading.Thread(target=self._record)
+        self.record_thread.start()
+
+    def _record(self):
         self.stream = self.audio.open(format=format,
                                       channels=channels,
                                       rate=rate,
@@ -29,12 +35,10 @@ class RecordAudio:
                                       frames_per_buffer=chunk)
         print("Recording started...")
 
-    def stop_recording(self):
-        if not self.recording:
-            return  # not recording
+        while self.recording:
+            data = self.stream.read(chunk)
+            self.frames.append(data)
 
-        self.recording = False
-        print("Recording stopped...")
 
         self.stream.stop_stream()
         self.stream.close()
@@ -47,7 +51,11 @@ class RecordAudio:
 
         print(f"Recording saved to {self.wave_output_file}")
 
-    def read_audio(self):
-        if self.recording:
-            data = self.stream.read(chunk)
-            self.frames.append(data)
+    def stop_recording(self):
+        if not self.recording:
+            return
+
+        self.recording = False
+        if self.record_thread:
+            self.record_thread.join()
+        print("Recording stopped...")

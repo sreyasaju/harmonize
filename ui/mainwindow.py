@@ -82,32 +82,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def play_audio_action(self):
         if self.wave_output_file:
-            if not self.audio_player is None:
+            if self.audio_player is None:
                 self.audio_player = playAudio(self.wave_output_file)
-            if not self.audio_player.is_playing:
-                self.audio_player.play()
-                icon = QtGui.QIcon("icons/pause.svg")
-                self.recordButton.setIcon(icon)
-                self.title.setStatusTip(f"Playing {self.wave_output_file}")
+
+            if self.audio_player:
+                if self.audio_player.is_playing:
+                    self.audio_player.pause()
+                    self.playButton.setIcon(QtGui.QIcon("icons/play.svg"))
+                    self.title.setStatusTip("Playback paused")
+                else:
+                    self.audio_player.play()
+                    self.playButton.setIcon(QtGui.QIcon("icons/pause.svg"))
+                    self.title.setStatusTip(f"Playing {self.wave_output_file}")
             else:
-                self.audio_player.pause()
-                icon = QtGui.QIcon("icons/play.svg")
-                self.recordButton.setIcon(icon)
-                self.title.setStatusTip("Playback paused")
+                self.show_error_message("Error initializing audio player.")
         else:
             self.show_error_message("No recorded audio file available!")
+        self.validate_inputs()
 
     def convert_to_midi_action(self):
-        if self.wave_output_file:
-            midi_filename = self.save_midi_field.text().strip()
-            if not midi_filename.lower().endswith('.midi'):
-                midi_filename += '.midi'
+        try:
+            if self.wave_output_file:
+                midi_filename = self.save_midi_field.text().strip()
+                if not midi_filename.lower().endswith('.midi'):
+                    midi_filename += '.midi'
 
-            self.midi_output_file = midi_filename
-            convert_to_midi(self.wave_output_file, self.midi_output_file)
-            self.title.setStatusTip(f"Converted MIDI saved to {self.midi_output_file}")
-        else:
-            self.show_error_message("You need to record audio first!")
+                self.midi_output_file = midi_filename
+                convert_to_midi(self.wave_output_file, self.midi_output_file)
+                self.title.setStatusTip(f"Converted MIDI saved to {self.midi_output_file}")
+            else:
+                self.show_error_message("You need to record audio first!")
+        except Exception as e:
+            self.show_error_message(f"Error during MIDI conversion: {str(e)}")
 
     def show_error_message(self, message):
         QMessageBox.critical(self, "Error", message)

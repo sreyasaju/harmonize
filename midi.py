@@ -86,3 +86,4 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
 
+
