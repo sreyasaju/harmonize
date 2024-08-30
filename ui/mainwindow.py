@@ -16,14 +16,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.save_voice_field.textChanged.connect(self.validate_inputs)
         self.save_midi_field.textChanged.connect(self.validate_inputs)
-
+        self.audio_widget = RecordAudio(self.waveframe)
         self.recordButton.clicked.connect(self.record_audio_action)
         self.playButton.clicked.connect(self.play_audio_action)
         self.convertButton.clicked.connect(self.convert_to_midi_action)
+        self.title = self.statusBar()
 
         self.wave_output_file = None
         self.midi_output_file = None
-        self.recorder = RecordAudio()
+        self.recorder = RecordAudio(self.waveframe)
         self.recording = False
         self.audio_player = None
 
