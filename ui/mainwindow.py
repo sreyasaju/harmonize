@@ -5,16 +5,15 @@ from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox,
 from PyQt6 import QtGui
 
 from ui_form import Ui_MainWindow
-from record import AudioRecorder
+from record import RecordAudio
 from midi import convert_to_midi
-from playback import play_wav_file
+from playback import playAudio
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
-        self.duration_field.textChanged.connect(self.validate_inputs)
         self.save_voice_field.textChanged.connect(self.validate_inputs)
         self.save_midi_field.textChanged.connect(self.validate_inputs)
 
@@ -24,8 +23,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.wave_output_file = None
         self.midi_output_file = None
-        self.recorder = AudioRecorder()
+        self.recorder = RecordAudio()
         self.recording = False
+        self.audio_player = None
 
         # disable all the buttons
         self.recordButton.setEnabled(False)
@@ -33,19 +33,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.convertButton.setEnabled(False)
 
     def validate_inputs(self):
-        record_seconds = self.duration_field.text().strip() if self.duration_field.text() else ''
         voice_filename = self.save_voice_field.text().strip() if self.save_voice_field.text() else ''
         midi_filename = self.save_midi_field.text().strip() if self.save_midi_field.text() else ''
 
-        self.recordButton.setEnabled(bool(record_seconds) and bool(voice_filename))
         wave_file_exists = bool(self.wave_output_file) and os.path.exists(self.wave_output_file or "")
+        all_filled = bool(voice_filename and midi_filename)
         self.playButton.setEnabled(wave_file_exists)
-        all_filled = bool(record_seconds and voice_filename and midi_filename) and wave_file_exists
-        self.convertButton.setEnabled(all_filled)
+        self.recordButton.setEnabled(all_filled)
+        self.convertButton.setEnabled(wave_file_exists)
 
     def record_audio_action(self):
         try:
-            record_seconds = int(self.duration_field.text().strip())
             filename = self.save_voice_field.text().strip()
 
             if not filename:
@@ -58,18 +56,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.wave_output_file = filename
 
             if self.recording:
-                # stop recording
+                # Stop recording
                 self.recorder.stop_recording()
-                icon = QtGui.QIcon()
-                icon.addPixmap(QtGui.QPixmap("icons/mic.svg"), QtGui.QIcon.Mode.Normal)
+                icon = QtGui.QIcon("icons/mic.svg")
+                self.recordButton.setIcon(icon)
                 self.title.setStatusTip("Recording stopped.")
                 self.recording = False
             else:
-                # start recording
+                # Start recording
                 self.recorder.start_recording(self.wave_output_file)
-                icon = QtGui.QIcon()
-                icon.addPixmap(QtGui.QPixmap("icons/stop.svg"), QtGui.QIcon.Mode.Normal)
-                self.title.setStatusTip(f"Recording started for {record_seconds} seconds.")
+                icon = QtGui.QIcon("icons/stop.svg")
+                self.recordButton.setIcon(icon)
                 self.recording = True
 
         except ValueError:
@@ -80,10 +77,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.show_error_message(f"An error occurred: {str(e)}")
 
+        self.validate_inputs()
+
+
     def play_audio_action(self):
         if self.wave_output_file:
-            play_wav_file(self.wave_output_file)
-            self.title.setStatusTip(f"Playing {self.wave_output_file}")
+            if not self.audio_player is None:
+                self.audio_player = playAudio(self.wave_output_file)
+            if not self.audio_player.is_playing:
+                self.audio_player.play()
+                icon = QtGui.QIcon("icons/pause.svg")
+                self.recordButton.setIcon(icon)
+                self.title.setStatusTip(f"Playing {self.wave_output_file}")
+            else:
+                self.audio_player.pause()
+                icon = QtGui.QIcon("icons/play.svg")
+                self.recordButton.setIcon(icon)
+                self.title.setStatusTip("Playback paused")
         else:
             self.show_error_message("No recorded audio file available!")
 

@@ -7,7 +7,7 @@ channels = 1
 rate = 44100
 chunk = 1024
 
-class AudioRecorder:
+class RecordAudio:
     def __init__(self):
         self.audio = pyaudio.PyAudio()
         self.stream = None
