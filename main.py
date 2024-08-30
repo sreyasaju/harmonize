@@ -1,4 +1,4 @@
-from record import record_audio
+from record import AudioRecorder
 from midi import convert_to_midi
 from playback import play_wav_file
 
@@ -17,7 +17,7 @@ def main_menu():
         if choice == '1':
             record_seconds = int(input("Enter the duration for recording (in seconds): "))
             wave_output_file = input("Enter output filename (e.g., recording.wav): ")
-            record_audio(record_seconds, wave_output_file)
+            AudioRecorder(record_seconds, wave_output_file)
         elif choice == '2':
             if wave_output_file is None:
                 print("No recorded audio file available!")

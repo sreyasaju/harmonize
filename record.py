@@ -1,45 +1,53 @@
 import pyaudio
-import subprocess
 import wave
 
+# Define audio parameters
+format = pyaudio.paInt16
+channels = 1
+rate = 44100
+chunk = 1024
 
-def record_audio(record_seconds, wave_output_file):
-    format = pyaudio.paInt16
-    channels = 1
-    rate = 44100  # number of samples
-    chunk = 1024  # number of frames in the buffer
+class AudioRecorder:
+    def __init__(self):
+        self.audio = pyaudio.PyAudio()
+        self.stream = None
+        self.frames = []
+        self.recording = False
 
-    audio = pyaudio.PyAudio()
-    stream = audio.open(format=format,
-                    channels=channels,
-                    rate=rate,
-                    input=True,
-                    frames_per_buffer=chunk)
-    print("Recording..")
-    frames = []
+    def start_recording(self, wave_output_file):
+        if self.recording:
+            return  # recording
 
-    try:
-        for i in range(0, int(rate/chunk*record_seconds)):
-            data = stream.read(chunk)  # read no. of frames from audio stream
-            frames.append(data)
-            # appends data to the frame list
-        print("Recording Finished...")
+        self.recording = True
+        self.frames = []
+        self.wave_output_file = wave_output_file
 
-    except KeyboardInterrupt:
-        print("Recording interrupted...")
+        self.stream = self.audio.open(format=format,
+                                      channels=channels,
+                                      rate=rate,
+                                      input=True,
+                                      frames_per_buffer=chunk)
+        print("Recording started...")
 
-    finally:
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()
+    def stop_recording(self):
+        if not self.recording:
+            return  # not recording
 
+        self.recording = False
+        print("Recording stopped...")
 
-        waveFile = wave.open(wave_output_file, 'wb')
-        waveFile.setnchannels(channels)
-        waveFile.setsampwidth(audio.get_sample_size(format))
-        waveFile.setframerate(rate)
-        waveFile.writeframes(b''.join(frames))
-        waveFile.close()
+        self.stream.stop_stream()
+        self.stream.close()
 
-        print(f"Recording saved to {wave_output_file}")
+        with wave.open(self.wave_output_file, 'wb') as waveFile:
+            waveFile.setnchannels(channels)
+            waveFile.setsampwidth(self.audio.get_sample_size(format))
+            waveFile.setframerate(rate)
+            waveFile.writeframes(b''.join(self.frames))
 
+        print(f"Recording saved to {self.wave_output_file}")
+
+    def read_audio(self):
+        if self.recording:
+            data = self.stream.read(chunk)
+            self.frames.append(data)
