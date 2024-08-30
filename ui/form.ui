@@ -466,9 +466,9 @@ border-radius: 5px;
         <enum>QFrame::Shadow::Raised</enum>
        </property>
       </widget>
-      <widget class="QPushButton" name="convertButton">
+      <widget class="QPushButton" name="pushButton_6">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -522,7 +522,7 @@ background-color: #45259b;</string>
         <string notr="true">buttonGroup</string>
        </attribute>
       </widget>
-      <widget class="QPushButton" name="recordButton">
+      <widget class="QPushButton" name="convertButton">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -576,7 +576,7 @@ background-color: #45259b;</string>
       </widget>
       <widget class="QPushButton" name="playButton">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
