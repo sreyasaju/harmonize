@@ -63,6 +63,9 @@
     </item>
     <item row="0" column="1" rowspan="2">
      <widget class="QWidget" name="widget" native="true">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <widget class="QLabel" name="about">
        <property name="geometry">
         <rect>
@@ -468,7 +471,7 @@ border-radius: 5px;
       </widget>
       <widget class="QPushButton" name="convertButton">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -524,7 +527,7 @@ background-color: #45259b;</string>
       </widget>
       <widget class="QPushButton" name="recordButton">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -555,8 +558,7 @@ background-color: #45259b;</string>
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>icons/mic.svg</normaloff>
-         <normalon>icons/stop.svg</normalon>icons/mic.svg</iconset>
+         <normaloff>icons/mic.svg</normaloff>icons/mic.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -576,7 +578,7 @@ background-color: #45259b;</string>
       </widget>
       <widget class="QPushButton" name="playButton">
        <property name="enabled">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="geometry">
         <rect>
@@ -612,8 +614,7 @@ background-color: #45259b;</string>
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>icons/play.svg</normaloff>
-         <normalon>icons/pause.svg</normalon>icons/play.svg</iconset>
+         <normaloff>icons/play.svg</normaloff>icons/play.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
