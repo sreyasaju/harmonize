@@ -36,19 +36,17 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     rms = librosa.feature.rms(y=signal, frame_length=2048, hop_length=512)
     rms_db = librosa.amplitude_to_db(rms, ref=np.max)
 
-    # using librosa.pyin for pitch detection
     fmin = librosa.note_to_hz('C2')
     fmax = librosa.note_to_hz('C7')
     pitches, voiced_flags, _ = librosa.pyin(signal, fmin=fmin, fmax=fmax, sr=sr)
 
-    # initialize MIDI output and add the track to it
     midi_file = MidiFile()
     track = MidiTrack()
     midi_file.tracks.append(track)
 
     hop_length = 512
     ticks_per_beat = midi_file.ticks_per_beat
-    tempo = 500000  # tempo in microseconds per beat (120 BPM)
+    tempo = 500000  # microseconds per beat
     ticks_per_second = (ticks_per_beat * 1000000) // tempo
 
     last_pitch = None
@@ -61,12 +59,12 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
             current_time = int((i * hop_length) / sr * ticks_per_second)
 
             if last_pitch is not None and last_pitch != midi_note:
-                # Note off for the previous note
+                # note off for the previous note
                 duration = current_time - last_time
                 track.append(Message('note_off', note=last_pitch, velocity=64, time=duration))
                 last_time = current_time
 
-            # Note on for the current note
+            # note on for the current note
             if last_pitch != midi_note:
                 track.append(Message('note_on', note=midi_note, velocity=64, time=0))
                 last_pitch = midi_note
@@ -78,11 +76,11 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
                 else:
                     print(f"No alphabet mapping found for MIDI Note {midi_note}")
 
-     # Note off for the last note
+     # note off for the last note
     if last_pitch is not None:
         track.append(Message('note_off', note=last_pitch, velocity=64, time=0))
 
-    # Save the MIDI file
+    # save the MIDI file
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
 
