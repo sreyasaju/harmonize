@@ -21,6 +21,7 @@ class Ui_MainWindow(object):
         MainWindow.setLocale(QtCore.QLocale(QtCore.QLocale.Language.English, QtCore.QLocale.Country.UnitedStates))
         MainWindow.setDocumentMode(True)
         MainWindow.setUnifiedTitleAndToolBarOnMac(True)
+        self.setWindowIcon(QtGui.QIcon('ui/icons/icon.svg'))
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)

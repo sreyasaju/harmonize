@@ -1,5 +1,6 @@
 import os
 import webbrowser
+
 from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PyQt6 import QtGui
 
