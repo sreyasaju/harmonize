@@ -1,6 +1,6 @@
-import sys
 import os
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox, QStatusBar
+import webbrowser
+from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox, QStatusBar
 from PyQt6 import QtGui
 
 from ui_form import Ui_MainWindow
@@ -19,6 +19,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.recordButton.clicked.connect(self.record_audio_action)
         self.playButton.clicked.connect(self.play_audio_action)
         self.convertButton.clicked.connect(self.convert_to_midi_action)
+        self.gitbutton.clicked.connect(self.git_url_action)
         self.title = self.statusBar()
 
         self.wave_output_file = None
@@ -47,7 +48,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             filename = self.save_voice_field.text().strip()
 
             if not filename:
-                self.title.setStatusTip("No filename! Recording cancelled.")
+                self.title.showMessage("No filename! Recording cancelled.")
                 return
 
             if not filename.lower().endswith('.wav'):
@@ -60,7 +61,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.recorder.stop_recording()
                 icon = QtGui.QIcon("icons/mic.svg")
                 self.recordButton.setIcon(icon)
-                self.title.setStatusTip("Recording stopped.")
+                self.title.showMessage("Recording stopped.")
                 self.recording = False
             else:
                 # start recording!
@@ -73,7 +74,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.show_error_message("Please enter a valid duration in seconds.")
         except KeyboardInterrupt:
             self.recording = False
-            self.title.setStatusTip("Recording stopped by interrupt.")
+            self.title.showMessage("Recording stopped by interrupt.")
         except Exception as e:
             self.show_error_message(f"An error occurred: {str(e)}")
 
@@ -89,11 +90,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.audio_player.is_playing:
                     self.audio_player.pause()
                     self.playButton.setIcon(QtGui.QIcon("icons/play.svg"))
-                    self.title.setStatusTip("Playback paused")
+                    self.title.showMessage("Playback paused")
                 else:
                     self.audio_player.play()
                     self.playButton.setIcon(QtGui.QIcon("icons/pause.svg"))
-                    self.title.setStatusTip(f"Playing {self.wave_output_file}")
+                    self.title.showMessage(f"Playing {self.wave_output_file}")
             else:
                 self.show_error_message("Error initializing audio player.")
         else:
@@ -109,11 +110,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 self.midi_output_file = midi_filename
                 convert_to_midi(self.wave_output_file, self.midi_output_file)
-                self.title.setStatusTip(f"Converted MIDI saved to {self.midi_output_file}")
+                self.playButton.setIcon(QtGui.QIcon("icons/convert.svg"))
+                self.title.showMessage(f"Converted MIDI saved to {self.midi_output_file}")
             else:
                 self.show_error_message("You need to record audio first!")
         except Exception as e:
             self.show_error_message(f"Error during MIDI conversion: {str(e)}")
+
+    def git_url_action(self):
+        url = "https://github.com/sreyasaju/harmonize"
+        webbrowser.open(url)
 
     def show_error_message(self, message):
         QMessageBox.critical(self, "Error", message)

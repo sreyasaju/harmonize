@@ -2,7 +2,7 @@ import pyaudio
 import wave
 import threading
 import numpy as np
-from PyQt6.QtWidgets import QFrame
+from PyQt6.QtWidgets import QFrame, QStatusBar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -75,6 +75,7 @@ class RecordAudio(QFrame):
             waveFile.writeframes(b''.join(self.frames))
 
         print(f"Recording saved to {self.wave_output_file}")
+
 
     def stop_recording(self):
         if not self.recording:
