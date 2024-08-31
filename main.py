@@ -31,22 +31,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.playButton.setEnabled(False)
         self.convertButton.setEnabled(False)
 
-        os.makedirs('voice_recordings', exist_ok=True)
-        os.makedirs('midi', exist_ok=True)
-
     def validate_inputs(self):
         voice_filename = self.save_voice_field.text().strip() if self.save_voice_field.text() else ''
         midi_filename = self.save_midi_field.text().strip() if self.save_midi_field.text() else ''
-
-        wave_file_path = os.path.join('voice_recordings', voice_filename + '.wav') if voice_filename else ''
-        midi_file_path = os.path.join('midi', midi_filename + '.midi') if midi_filename else ''
-
-        wave_file_exists = os.path.exists(wave_file_path)
+        wave_file_exists = bool(self.wave_output_file) and os.path.exists(self.wave_output_file or "")
         all_filled = bool(voice_filename and midi_filename)
-
-        self.playButton.setEnabled(wave_file_exists and all_filled)
+        self.playButton.setEnabled(wave_file_exists)
         self.recordButton.setEnabled(all_filled)
         self.convertButton.setEnabled(wave_file_exists)
+
     def record_audio_action(self):
         try:
             filename = self.save_voice_field.text().strip()
@@ -55,10 +48,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.show_error_message("No filename! Recording cancelled.")
                 return
 
-            if not filename.lower().endswith('.wav'):
+            if not filename.endswith('.wav'):
                 filename += '.wav'
 
-            self.wave_output_file = os.path.join('voice_recordings', filename)
+            self.wave_output_file = filename
 
             if self.recording:
                 self.recorder.stop_recording()
@@ -66,6 +59,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.recordButton.setIcon(icon)
                 self.update_status_bar(f"Recording stopped! Saved to {self.wave_output_file}")
                 self.recording = False
+                self.validate_inputs()
+
             else:
                 self.recorder.start_recording(self.wave_output_file)
                 icon = QtGui.QIcon("ui/icons/stop.svg")
@@ -107,10 +102,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         try:
             if self.wave_output_file:
                 midi_filename = self.save_midi_field.text().strip()
-                if not midi_filename.lower().endswith('.midi'):
+                if not midi_filename.endswith('.midi'):
                     midi_filename += '.midi'
 
-                self.midi_output_file = os.path.join('midi', midi_filename)
+                self.midi_output_file =  midi_filename
                 convert_to_midi(self.wave_output_file, self.midi_output_file)
                 msg = QMessageBox(self)
                 msg.setWindowTitle("MIDI Conversion Success!")
