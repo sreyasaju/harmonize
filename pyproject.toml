@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "harmonize"
+version = "0.1.0"
+description = "Release"
+authors = ["Sreya Saju <68282466+sreyasaju@users.noreply.github.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.2"
+numpy = "1.26.4"
+PyAudio = "0.2.14"
+mido = "1.3.2"
+librosa = "0.10.2.post1"
+pydub = "0.25.1"
+PySide6 = "6.7.2"
+pygame = "2.6.0"
+PyQt6 = "6.7.1"
+matplotlib = "3.9.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.3.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
