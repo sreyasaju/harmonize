@@ -1,4 +1,3 @@
-# This Python file uses the following encoding: utf-8
 import sys
 import os
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox, QStatusBar
@@ -57,14 +56,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.wave_output_file = filename
 
             if self.recording:
-                # Stop recording
+                # stop recording!
                 self.recorder.stop_recording()
                 icon = QtGui.QIcon("icons/mic.svg")
                 self.recordButton.setIcon(icon)
                 self.title.setStatusTip("Recording stopped.")
                 self.recording = False
             else:
-                # Start recording
+                # start recording!
                 self.recorder.start_recording(self.wave_output_file)
                 icon = QtGui.QIcon("icons/stop.svg")
                 self.recordButton.setIcon(icon)
