@@ -7,3 +7,10 @@ venv/
 
 ui/.qtcreator
 ui/ui.pyproject.user
+
+# my test files ;)
+ss.wav
+ss.midi
+test.wav
+test.midi
+output.midi
