@@ -40,19 +40,6 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     print(estimated_tempo) 
     if estimated_tempo == 0 or np.isnan(estimated_tempo):
         estimated_tempo = 120.0  # fallback for weird cases like whispering
-    
-    dtempo = librosa.feature.tempo(onset_envelope=onset_env, sr=sr, hop_length=hop_length, aggregate=None)
-    dtempo = scipy.signal.medfilt(dtempo, kernel_size=5) # Smoooth out those jittery tempo changes
-    print("dtempo:", dtempo)
-
-    def get_tempo_bpm(i):
-        if i < len(dtempo):
-            t = dtempo[i]
-            if t == 0 or np.isnan(t):
-                return estimated_tempo
-            return t
-        return estimated_tempo
-
 
 
     last_pitch = None
@@ -60,8 +47,8 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
 
     for i, (pitch, voiced_flag) in enumerate(zip(pitches, voiced_flags)):
         rms_value = rms_db[0][i]
-        if voiced_flag and rms_value > silence_threshold and pitch is not None:
-            tempo_bpm = get_tempo_bpm(i)
+        if voiced_flag and rms_value > silence_threshold:
+            tempo_bpm = estimated_tempo
             microseconds_per_beat = int(60_000_000 / tempo_bpm)
             ticks_per_second = (ticks_per_beat * 1_000_000) // microseconds_per_beat
 
