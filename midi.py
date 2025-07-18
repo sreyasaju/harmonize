@@ -15,13 +15,6 @@ def midi_to_alphabet(midi_note):
         note = note_names[midi_note % 12]
         return f"{note}{octave}"
     
-    # If your MIDI note isn't valid, return None — no mysterious results here!
-    return None
-    if midi_note in note_mapping:
-        return note_mapping[midi_note]
-    else:
-        return None
-
 
 def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     signal, sr = librosa.load(wave_output_file, sr=None)
