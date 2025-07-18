@@ -1,12 +1,13 @@
 import librosa
 import numpy as np
 from mido import Message, MidiFile, MidiTrack
+import scipy.signal
 
-# function to convert frequency to MIDI note
 def freq_to_midi(freq):
     return int(librosa.hz_to_midi(freq))
 
 def midi_to_alphabet(midi_note):
+    # TODO: maybe let users choose the pitch range via UI dropdown instead of hardcoding C2–C7.... sometime later?
     note_mapping = {
         36: 'C2', 37: 'C#2', 38: 'D2', 39: 'D#2', 40: 'E2',
         41: 'F2', 42: 'F#2', 43: 'G2', 44: 'G#2', 45: 'A2',
@@ -32,7 +33,7 @@ def midi_to_alphabet(midi_note):
 def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     signal, sr = librosa.load(wave_output_file, sr=None)
 
-    # Calculate the RMS energy of the signal
+    # calculate the RMS energy of the signal, to diff singing and noise...
     rms = librosa.feature.rms(y=signal, frame_length=2048, hop_length=512)
     rms_db = librosa.amplitude_to_db(rms, ref=np.max)
 
@@ -46,21 +47,46 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
 
     hop_length = 512
     ticks_per_beat = midi_file.ticks_per_beat
-    tempo = 500000  # microseconds per beat
-    ticks_per_second = (ticks_per_beat * 1000000) // tempo
+    onset_env = librosa.onset.onset_strength(y=signal, sr=sr) # to future me, https://librosa.org/doc/0.11.0/generated/librosa.onset.onset_strength.html#librosa.onset.onset_strength
+
+    # using the librosa beat detection function, rather than hardcoding it...
+    estimated_tempo = librosa.feature.tempo(y=signal, sr=sr)[0] # need to make scalar, else gives error on // to BPS
+    print(estimated_tempo) 
+    if estimated_tempo == 0 or np.isnan(estimated_tempo):
+        estimated_tempo = 120.0  # fallback for weird cases like whispering
+    
+    dtempo = librosa.feature.tempo(onset_envelope=onset_env, sr=sr, hop_length=hop_length, aggregate=None)
+    dtempo = scipy.signal.medfilt(dtempo, kernel_size=5) # Smoooth out those jittery tempo changes
+    print("dtempo:", dtempo)
+
+    def get_tempo_bpm(i):
+        if i < len(dtempo):
+            t = dtempo[i]
+            if t == 0 or np.isnan(t):
+                return estimated_tempo
+            return t
+        return estimated_tempo
+
+
 
     last_pitch = None
     last_time = 0
 
     for i, (pitch, voiced_flag) in enumerate(zip(pitches, voiced_flags)):
         rms_value = rms_db[0][i]
-        if voiced_flag and rms_value > silence_threshold:
+        if voiced_flag and rms_value > silence_threshold and pitch is not None:
+            tempo_bpm = get_tempo_bpm(i)
+            microseconds_per_beat = int(60_000_000 / tempo_bpm)
+            ticks_per_second = (ticks_per_beat * 1_000_000) // microseconds_per_beat
+
             midi_note = freq_to_midi(pitch)
             current_time = int((i * hop_length) / sr * ticks_per_second)
 
             if last_pitch is not None and last_pitch != midi_note:
                 # note off for the previous note
                 duration = current_time - last_time
+                if duration < 0:
+                    duration = 0
                 track.append(Message('note_off', note=last_pitch, velocity=64, time=duration))
                 last_time = current_time
 
@@ -80,8 +106,6 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     if last_pitch is not None:
         track.append(Message('note_off', note=last_pitch, velocity=64, time=0))
 
-    # save the MIDI file
+    # save the masterpiece ;)
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
-
-
