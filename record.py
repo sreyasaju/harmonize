@@ -7,8 +7,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 format = pyaudio.paInt16
-channels = 1
-rate = 44100
+channels = 1 
+rate = 44100 #this is standard sample rate
 chunk = 1024
 
 class RecordAudio(QFrame):
@@ -20,9 +20,10 @@ class RecordAudio(QFrame):
         self.recording = False
         self.wave_output_file = None
         self.record_thread = None
-        self.waveframe = waveframe
 
-        self.fig = Figure(figsize=(10, 2), dpi=100)
+
+        self.waveframe = waveframe
+        self.fig = Figure(figsize=(10, 2), dpi=100) #10in2in would do
         self.ax = self.fig.add_subplot(111)
         self.xdata = np.arange(chunk)
         self.ydata = np.zeros(chunk)
@@ -52,11 +53,7 @@ class RecordAudio(QFrame):
         self.record_thread.start()
 
     def _record(self):
-        self.stream = self.audio.open(format=format,
-                                      channels=channels,
-                                      rate=rate,
-                                      input=True,
-                                      frames_per_buffer=chunk)
+        self.stream = self.audio.open(format=format, channels=channels, rate=rate, input=True, frames_per_buffer=chunk)
         print("Recording started...")
 
         while self.recording:
@@ -83,11 +80,11 @@ class RecordAudio(QFrame):
         self.recording = False
 
     def _update_plot(self, data):
-        new_data = np.frombuffer(data, dtype=np.int16)
+        new_data = np.frombuffer(data, dtype=np.int16) #raw audio --> numpy array int16!
 
         self.ydata = np.roll(self.ydata, -len(new_data))
         self.ydata[-len(new_data):] = new_data
 
         self.line.set_ydata(self.ydata)
-        self.canvas.draw()
+        self.canvas.draw() # redrawing...
         return self.line
