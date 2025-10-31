@@ -36,8 +36,9 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     onset_env = librosa.onset.onset_strength(y=signal, sr=sr) # to future me, https://librosa.org/doc/0.11.0/generated/librosa.onset.onset_strength.html#librosa.onset.onset_strength
 
     # using the librosa beat detection function, rather than hardcoding it...
-    estimated_tempo = librosa.feature.tempo(y=signal, sr=sr)[0] # need to make scalar, else gives error on // to BPS
-    print(estimated_tempo) 
+    tempo_array = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)
+    estimated_tempo = tempo_array[0] if len(tempo_array) > 0 else 120.0
+    print(estimated_tempo)
     if estimated_tempo == 0 or np.isnan(estimated_tempo):
         estimated_tempo = 120.0  # fallback for weird cases like whispering
 
@@ -47,33 +48,37 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
 
     for i, (pitch, voiced_flag) in enumerate(zip(pitches, voiced_flags)):
         rms_value = rms_db[0][i]
-        if voiced_flag and rms_value > silence_threshold:
-            tempo_bpm = estimated_tempo
-            microseconds_per_beat = int(60_000_000 / tempo_bpm)
-            ticks_per_second = (ticks_per_beat * 1_000_000) // microseconds_per_beat
+        current_time = int((i * hop_length) / sr * ticks_per_beat * 60 / estimated_tempo)
 
+        if voiced_flag and pitch is not None and not np.isnan(pitch) and rms_value > silence_threshold:
             midi_note = freq_to_midi(pitch)
-            current_time = int((i * hop_length) / sr * ticks_per_second)
 
-            if last_pitch is not None and last_pitch != midi_note:
-                # note off for the previous note
-                duration = current_time - last_time
-                if duration < 0:
-                    duration = 0
-                track.append(Message('note_off', note=last_pitch, velocity=64, time=duration))
-                last_time = current_time
-
-            # note on for the current note
-            if last_pitch != midi_note:
+            if last_pitch is None:
                 track.append(Message('note_on', note=midi_note, velocity=64, time=0))
                 last_pitch = midi_note
                 last_time = current_time
 
-                alphabet = midi_to_alphabet(midi_note)
-                if alphabet:
-                    print(f"Pitch: {pitch:.2f}, MIDI Note: {alphabet}")
-                else:
-                    print(f"No alphabet mapping found for MIDI Note {midi_note}")
+            elif last_pitch != midi_note:
+                duration = current_time - last_time
+                if duration < 0:
+                    duration = 0
+                track.append(Message('note_off', note=last_pitch, velocity=64, time=duration))
+                track.append(Message('note_on', note=midi_note, velocity=64, time=0))
+                last_pitch = midi_note
+                last_time = current_time
+
+            alphabet = midi_to_alphabet(midi_note)
+            if alphabet:
+                print(f"Pitch: {pitch:.2f}, MIDI Note: {alphabet}")
+            else:
+                print(f"No alphabet mapping found for MIDI Note {midi_note}")
+
+        elif last_pitch is not None:
+            duration = current_time - last_time
+            if duration < 0:
+                duration = 0
+            track.append(Message('note_off', note=last_pitch, velocity=64, time=duration))
+            last_pitch = None
 
      # note off for the last note
     if last_pitch is not None:
