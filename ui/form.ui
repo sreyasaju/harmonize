@@ -114,8 +114,8 @@ background-color: #45259b;</string>
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>icons/github.svg</normaloff>icons/github.svg</iconset>
+        <iconset resource="../res.qrc">
+         <normaloff>:/icons/ui/icons/github.svg</normaloff>:/icons/ui/icons/github.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -217,8 +217,8 @@ background-color: #45259b;</string>
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>icons/convert.svg</normaloff>icons/convert.svg</iconset>
+        <iconset resource="../res.qrc">
+         <normaloff>:/icons/ui/icons/convert.svg</normaloff>:/icons/ui/icons/convert.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -268,8 +268,8 @@ background-color: #45259b;</string>
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>icons/mic.svg</normaloff>icons/mic.svg</iconset>
+        <iconset resource="../res.qrc">
+         <normaloff>:/icons/ui/icons/mic.svg</normaloff>:/icons/ui/icons/mic.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -324,8 +324,8 @@ background-color: #45259b;</string>
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>icons/play.svg</normaloff>icons/play.svg</iconset>
+        <iconset resource="../res.qrc">
+         <normaloff>:/icons/ui/icons/play.svg</normaloff>:/icons/ui/icons/play.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -563,7 +563,9 @@ border-radius: 5px;
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup"/>

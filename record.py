@@ -2,9 +2,11 @@ import pyaudio
 import wave
 import threading
 import numpy as np
-from PyQt6.QtWidgets import QFrame, QStatusBar
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PySide6.QtWidgets import QFrame, QStatusBar
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import os
+import sys
 
 format = pyaudio.paInt16
 channels = 1 
@@ -41,13 +43,22 @@ class RecordAudio(QFrame):
         self.canvas.setGeometry(self.waveframe.rect())
         self.canvas.draw()
 
+    def get_output_dir(self):
+        if getattr(sys, 'frozen', False):
+            # Running as a bundled exe
+            return os.path.dirname(sys.executable)
+        else:
+            # Running in normal python environment
+            return os.getcwd()
+
     def start_recording(self, wave_output_file):
         if self.recording:
             return
 
         self.recording = True
         self.frames = []
-        self.wave_output_file = wave_output_file
+        output_dir = self.get_output_dir()
+        self.wave_output_file = os.path.join(output_dir, wave_output_file)
 
         self.record_thread = threading.Thread(target=self._record)
         self.record_thread.start()

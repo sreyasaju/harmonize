@@ -1,13 +1,18 @@
 import os
 import webbrowser
 
-from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox
-from PyQt6 import QtGui
+from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide6 import QtGui
 
 from ui.ui_form import Ui_MainWindow
 from record import RecordAudio
 from midi import convert_to_midi
 from playback import playAudio
+import sys
+
+import res_rc
+
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -32,6 +37,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.playButton.setEnabled(False)
         self.convertButton.setEnabled(False)
 
+    def get_output_dir(self):
+        if getattr(sys, 'frozen', False):
+            return os.path.dirname(sys.executable)
+        else:
+            return os.getcwd()
+
     def validate_inputs(self):
         voice_filename = self.save_voice_field.text().strip() if self.save_voice_field.text() else ''
         midi_filename = self.save_midi_field.text().strip() if self.save_midi_field.text() else ''
@@ -52,11 +63,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not filename.endswith('.wav'):
                 filename += '.wav'
 
-            self.wave_output_file = filename
+            output_dir = self.get_output_dir()
+            self.wave_output_file = os.path.join(output_dir, filename)
 
             if self.recording:
                 self.recorder.stop_recording()
-                icon = QtGui.QIcon("ui/icons/mic.svg")
+                icon = QtGui.QIcon(":/icons/ui/icons/mic.svg")
                 self.recordButton.setIcon(icon)
                 self.update_status_bar(f"Recording stopped! Saved to {self.wave_output_file}")
                 self.recording = False
@@ -64,7 +76,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             else:
                 self.recorder.start_recording(self.wave_output_file)
-                icon = QtGui.QIcon("ui/icons/stop.svg")
+                icon = QtGui.QIcon(":/icons/ui/icons/stop.svg")
                 self.recordButton.setIcon(icon)
                 self.update_status_bar(f"Recording started! Saving to {self.wave_output_file}")
                 self.recording = True
@@ -87,11 +99,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if self.audio_player:
                 if self.audio_player.is_playing:
                     self.audio_player.pause()
-                    self.playButton.setIcon(QtGui.QIcon("ui/icons/play.svg"))
+                    self.playButton.setIcon(QtGui.QIcon(":/icons/ui/icons/play.svg"))
                     self.update_status_bar("Playback paused")
                 else:
                     self.audio_player.play()
-                    self.playButton.setIcon(QtGui.QIcon("ui/icons/pause.svg"))
+                    self.playButton.setIcon(QtGui.QIcon(":/icons/ui/icons/pause.svg"))
                     self.update_status_bar(f"Playing {self.wave_output_file}")
             else:
                 self.show_error_message("Error initializing audio player.")
@@ -106,12 +118,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if not midi_filename.endswith('.midi'):
                     midi_filename += '.midi'
 
-                self.midi_output_file =  midi_filename
+                output_dir = self.get_output_dir()
+                self.midi_output_file = os.path.join(output_dir, midi_filename)
                 convert_to_midi(self.wave_output_file, self.midi_output_file)
                 msg = QMessageBox(self)
                 msg.setWindowTitle("MIDI Conversion Success!")
                 msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
-                msg.setIconPixmap(QtGui.QPixmap("ui/icons/convert.svg"))
+                msg.setIconPixmap(QtGui.QPixmap(":/icons/ui/icons/convert.svg"))
                 msg.exec()
                 self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
