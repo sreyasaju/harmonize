@@ -52,7 +52,6 @@ a = Analysis(
         'PyQt6.QtMultimedia',
         'tkinter',
         '_tkinter',
-        'matplotlib',  # remove this line if your app uses matplotlib
     ],
     noarchive=False,
     optimize=0,
@@ -84,6 +83,6 @@ exe = EXE(
 app = BUNDLE(
     exe,
     name='harmonize.app',
-    icon=None,              # replace None with 'assets/icon.icns' if you have one
+    icon=None,
     bundle_identifier='com.sreyasaju.harmonize',
 )

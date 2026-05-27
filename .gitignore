@@ -9,6 +9,8 @@ ui/.qtcreator
 ui/ui.pyproject.user
 
 # my test files ;)
+recordings/
+midi/
 ss.wav
 ss.midi
 test.wav
