@@ -1,4 +1,5 @@
 import os
+os.environ["NUMBA_DISABLE_JIT"] = "1"
 import webbrowser
 
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
@@ -11,8 +12,6 @@ from playback import playAudio
 import sys
 
 import res_rc
-
-
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -38,10 +37,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.convertButton.setEnabled(False)
 
     def get_output_dir(self):
+        """Get the base output directory.
+        for packaged apps: ~/Harmonize/
+        for development: current working directory
+        """
         if getattr(sys, 'frozen', False):
-            return os.path.dirname(sys.executable)
+            # in case of packaged app, use user's home directory to avoid permission issues
+            base_dir = os.path.expanduser("~/Harmonize")
         else:
-            return os.getcwd()
+            # for dev, use cwd :)
+            base_dir = os.getcwd()
+        
+        return base_dir
+    
+    def get_recordings_dir(self):
+        """Get the recordings directory, creating it if needed."""
+        recordings_dir = os.path.join(self.get_output_dir(), "recordings")
+        os.makedirs(recordings_dir, exist_ok=True)
+        return recordings_dir
+    
+    def get_midi_dir(self):
+        """Get the MIDI directory, creating it if needed."""
+        midi_dir = os.path.join(self.get_output_dir(), "midi")
+        os.makedirs(midi_dir, exist_ok=True)
+        return midi_dir
 
     def validate_inputs(self):
         voice_filename = self.save_voice_field.text().strip() if self.save_voice_field.text() else ''
@@ -63,8 +82,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not filename.endswith('.wav'):
                 filename += '.wav'
 
-            output_dir = self.get_output_dir()
-            self.wave_output_file = os.path.join(output_dir, filename)
+            recordings_dir = self.get_recordings_dir()
+            self.wave_output_file = os.path.join(recordings_dir, filename)
 
             if self.recording:
                 self.recorder.stop_recording()
@@ -118,16 +137,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if not midi_filename.endswith('.midi'):
                     midi_filename += '.midi'
 
-                output_dir = self.get_output_dir()
-                self.midi_output_file = os.path.join(output_dir, midi_filename)
+                midi_dir = self.get_midi_dir()
+                self.midi_output_file = os.path.join(midi_dir, midi_filename)
                 convert_to_midi(self.wave_output_file, self.midi_output_file)
                 msg = QMessageBox(self)
                 msg.setWindowTitle("MIDI Conversion Success!")
                 msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
                 msg.setIconPixmap(QtGui.QPixmap(":/icons/ui/icons/convert.svg"))
                 msg.exec()
-                self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
-
                 self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
             else:

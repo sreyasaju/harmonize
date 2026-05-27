@@ -1,11 +1,15 @@
+import os
+os.environ.setdefault("QT_API", "pyside6")
+
 import pyaudio
 import wave
 import threading
 import numpy as np
-from PySide6.QtWidgets import QFrame, QStatusBar
+import matplotlib
+matplotlib.use("QtAgg", force=True)
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-import os
+from PySide6.QtWidgets import QFrame, QVBoxLayout
 import sys
 
 format = pyaudio.paInt16
@@ -39,16 +43,18 @@ class RecordAudio(QFrame):
         self.ax.axis('off')
 
         self.canvas = FigureCanvas(self.fig)
-        self.canvas.setParent(self.waveframe)
-        self.canvas.setGeometry(self.waveframe.rect())
+        self.waveframe = waveframe
+        self.layout = QVBoxLayout(self.waveframe)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.addWidget(self.canvas)
         self.canvas.draw()
 
     def get_output_dir(self):
         if getattr(sys, 'frozen', False):
-            # Running as a bundled exe
-            return os.path.dirname(sys.executable)
+            # user's home directory to avoid permission issues
+            return os.path.expanduser("~/Harmonize")
         else:
-            # Running in normal python environment
+            # dev -> cwd ;)
             return os.getcwd()
 
     def start_recording(self, wave_output_file):
