@@ -2,9 +2,11 @@ import librosa
 import numpy as np
 from mido import Message, MidiFile, MidiTrack
 import scipy.signal
+from mido import MetaMessage
+
 
 def freq_to_midi(freq):
-    return int(librosa.hz_to_midi(freq))
+    return int(round(librosa.hz_to_midi(freq)))
 
 def midi_to_alphabet(midi_note):
     if 0 <= midi_note <= 127:
@@ -17,6 +19,10 @@ def midi_to_alphabet(midi_note):
     
 
 def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
+    # TEST: Use test_sample.wav for testing
+    wave_output_file = "test_sample.wav"
+    # wave_output_file = wave_output_file  # Original
+    
     signal, sr = librosa.load(wave_output_file, sr=None)
 
     # Calculate the RMS energy of the signal
@@ -47,6 +53,7 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     test_pitch = None
     test_count = 0
     
+    track.append(MetaMessage('set_tempo', tempo=tempo, time=0))
 
     for i, (pitch, voiced_flag) in enumerate(zip(pitches, voiced_flags)):
 
@@ -99,17 +106,10 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
 
 
      # note off for the last note
-    if last_pitch is not None:
-        track.append(Message('note_off', note=last_pitch, velocity=64, time=0))
+    if stable_pitch is not None:
+        track.append(Message('note_off', note=stable_pitch, velocity=64, time=0))
 
     # save the MIDI file
     midi_file.save(midi_output)
     print(f"Saved MIDI to {midi_output}")
     
-     # note off for the last note
-    if last_pitch is not None:
-        track.append(Message('note_off', note=last_pitch, velocity=64, time=0))
-
-    # save the MIDI file
-    midi_file.save(midi_output)
-    print(f"Saved MIDI to {midi_output}")
