@@ -69,7 +69,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         all_filled = bool(voice_filename and midi_filename)
         self.playButton.setEnabled(wave_file_exists)
         self.recordButton.setEnabled(all_filled)
-        self.convertButton.setEnabled(wave_file_exists)
+        # Original: self.convertButton.setEnabled(wave_file_exists)
+        # TEST: Enable convert button optionally for testing
+        midi_filename_filled = bool(self.save_midi_field.text().strip())
+        self.convertButton.setEnabled(midi_filename_filled)
 
     def record_audio_action(self):
         try:
@@ -132,23 +135,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def convert_to_midi_action(self):
         try:
-            if self.wave_output_file:
-                midi_filename = self.save_midi_field.text().strip()
-                if not midi_filename.endswith('.midi'):
-                    midi_filename += '.midi'
+            # TEST: Bypass recording requirement - use test_sample.wav
+            # Original logic:
+            # if self.wave_output_file:
+            midi_filename = self.save_midi_field.text().strip()
+            if not midi_filename.endswith('.midi'):
+                midi_filename += '.midi'
 
-                midi_dir = self.get_midi_dir()
-                self.midi_output_file = os.path.join(midi_dir, midi_filename)
-                convert_to_midi(self.wave_output_file, self.midi_output_file)
-                msg = QMessageBox(self)
-                msg.setWindowTitle("MIDI Conversion Success!")
-                msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
-                msg.setIconPixmap(QtGui.QPixmap(":/icons/ui/icons/convert.svg"))
-                msg.exec()
-                self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
+            midi_dir = self.get_midi_dir()
+            self.midi_output_file = os.path.join(midi_dir, midi_filename)
+            # Use wave_output_file if it exists, otherwise convert_to_midi will use test_sample.wav
+            convert_to_midi(self.wave_output_file, self.midi_output_file)
+            msg = QMessageBox(self)
+            msg.setWindowTitle("MIDI Conversion Success!")
+            msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
+            msg.setIconPixmap(QtGui.QPixmap(":/icons/ui/icons/convert.svg"))
+            msg.exec()
+            self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
-            else:
-                self.show_error_message("You need to record audio first!")
+            # else:
+            #     self.show_error_message("You need to record audio first!")
         except Exception as e:
             self.show_error_message(f"Error during MIDI conversion: {str(e)}")
 
