@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>711</height>
+    <height>741</height>
    </rect>
   </property>
   <property name="font">
    <font>
     <family>Ubuntu</family>
-    <pointsize>14</pointsize>
+    <pointsize>20</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -38,9 +38,9 @@
    <widget class="QLabel" name="title">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>391</width>
+      <x>30</x>
+      <y>40</y>
+      <width>271</width>
       <height>91</height>
      </rect>
     </property>
@@ -86,10 +86,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>356</x>
-      <y>134</y>
+      <x>360</x>
+      <y>160</y>
       <width>631</width>
-      <height>541</height>
+      <height>511</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -374,9 +374,9 @@ background-color: #45259b;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>160</y>
+      <y>170</y>
       <width>318</width>
-      <height>261</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -393,9 +393,9 @@ border-radius: 10px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>50</y>
+       <y>70</y>
        <width>251</width>
-       <height>121</height>
+       <height>91</height>
       </rect>
      </property>
      <widget class="QLabel" name="save_voice_label">
@@ -478,7 +478,7 @@ border-radius: 5px;
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(56, 59, 94)</string>
+       <string notr="true">color: rgb(93, 98, 159)</string>
       </property>
       <property name="text">
        <string>Record Parameters: </string>
@@ -508,127 +508,11 @@ border-radius: 5px;
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="settings_2">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>230</y>
-       <width>318</width>
-       <height>250</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>318</width>
-       <height>250</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #12131e;
-border-radius: 10px</string>
-     </property>
-     <widget class="QGroupBox" name="record_parameter_groupBox_3">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>50</y>
-        <width>251</width>
-        <height>121</height>
-       </rect>
-      </property>
-      <widget class="QLabel" name="save_voice_label_3">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>50</y>
-         <width>121</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-radius:5px;
-background-color: #45259b</string>
-       </property>
-       <property name="text">
-        <string>Save Voice As:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-       </property>
-       <property name="margin">
-        <number>10</number>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="save_voice_field_3">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>50</y>
-         <width>141</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Enter the filename to save your voice recording, don't forget the extension! e.g., voice.wav</string>
-       </property>
-       <property name="statusTip">
-        <string>Enter filename to save recording, with &quot;.wav&quot; extension</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 3px solid #45259b;
-border-radius: 5px;
-
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>voice.wav</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="record_parameters_header_3">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>10</y>
-         <width>251</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>16</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(56, 59, 94)</string>
-       </property>
-       <property name="text">
-        <string>Record Parameters: </string>
-       </property>
-      </widget>
-     </widget>
-    </widget>
     <widget class="QGroupBox" name="midi_parameters_groupBox">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>130</y>
+       <y>170</y>
        <width>271</width>
        <height>121</height>
       </rect>
@@ -748,7 +632,7 @@ QSlider::ticks:horizontal {
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>10</y>
+        <y>0</y>
         <width>21</width>
         <height>71</height>
        </rect>
@@ -795,7 +679,7 @@ QProgressBar::chunk:vertical {
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>10</y>
+        <y>0</y>
         <width>21</width>
         <height>71</height>
        </rect>
@@ -842,7 +726,7 @@ QProgressBar::chunk:vertical {
       <property name="geometry">
        <rect>
         <x>90</x>
-        <y>20</y>
+        <y>10</y>
         <width>171</width>
         <height>21</height>
        </rect>
@@ -971,7 +855,7 @@ QProgressBar::chunk:vertical {
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>20</y>
+       <y>40</y>
        <width>261</width>
        <height>21</height>
       </rect>
@@ -991,39 +875,11 @@ QProgressBar::chunk:vertical {
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="about">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>30</y>
-      <width>342</width>
-      <height>74</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-      <pointsize>48</pointsize>
-     </font>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Plain</enum>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Transform your voice to MIDI&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Set the parameters and start recording!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-    </property>
-    <property name="margin">
-     <number>10</number>
-    </property>
-   </widget>
    <widget class="QPushButton" name="gitbutton">
     <property name="geometry">
      <rect>
       <x>920</x>
-      <y>50</y>
+      <y>60</y>
       <width>61</width>
       <height>61</height>
      </rect>
@@ -1056,15 +912,15 @@ background-color: #45259b;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>430</y>
+      <y>480</y>
       <width>318</width>
-      <height>250</height>
+      <height>189</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
       <width>318</width>
-      <height>250</height>
+      <height>189</height>
      </size>
     </property>
     <property name="styleSheet">
@@ -1075,40 +931,14 @@ border-radius: 10px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>50</y>
-       <width>251</width>
-       <height>121</height>
+       <y>70</y>
+       <width>281</width>
+       <height>91</height>
       </rect>
      </property>
-     <widget class="QLabel" name="save_midi_label">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>30</y>
-        <width>131</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Ubuntu</family>
-        <pointsize>15</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border-radius:5px;
-background-color: #45259b</string>
-      </property>
-      <property name="text">
-       <string>Save MIDI As:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-      </property>
-      <property name="margin">
-       <number>10</number>
-      </property>
-     </widget>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
      <widget class="QLineEdit" name="save_midi_field">
       <property name="geometry">
        <rect>
@@ -1149,146 +979,134 @@ border-radius: 5px;
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="midi_header">
+     <widget class="QLabel" name="save_midi_label">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>251</width>
-        <height>21</height>
+        <y>30</y>
+        <width>131</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <family>Ubuntu</family>
-        <pointsize>16</pointsize>
-        <bold>true</bold>
+        <pointsize>15</pointsize>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(56, 59, 94)</string>
+       <string notr="true">border-radius:5px;
+background-color: #45259b</string>
       </property>
       <property name="text">
-       <string>MIDI File: </string>
+       <string>Save MIDI As:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="margin">
+       <number>10</number>
       </property>
      </widget>
-    </widget>
-    <widget class="QGroupBox" name="settings_4">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>230</y>
-       <width>318</width>
-       <height>250</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>318</width>
-       <height>250</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #12131e;
-border-radius: 10px</string>
-     </property>
-     <widget class="QGroupBox" name="record_parameter_groupBox_5">
+     <widget class="QGroupBox" name="settings_4">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>50</y>
-        <width>251</width>
-        <height>121</height>
+        <x>10</x>
+        <y>100</y>
+        <width>318</width>
+        <height>250</height>
        </rect>
       </property>
-      <widget class="QLabel" name="save_voice_label_5">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>50</y>
-         <width>121</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-radius:5px;
-background-color: #45259b</string>
-       </property>
-       <property name="text">
-        <string>Save Voice As:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-       </property>
-       <property name="margin">
-        <number>10</number>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="save_voice_field_5">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>50</y>
-         <width>141</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>15</pointsize>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Enter the filename to save your voice recording, don't forget the extension! e.g., voice.wav</string>
-       </property>
-       <property name="statusTip">
-        <string>Enter filename to save recording, with &quot;.wav&quot; extension</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 3px solid #45259b;
-border-radius: 5px;
-
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>voice.wav</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="record_parameters_header_5">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>10</y>
-         <width>251</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Ubuntu</family>
-         <pointsize>16</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(56, 59, 94)</string>
-       </property>
-       <property name="text">
-        <string>Record Parameters: </string>
-       </property>
-      </widget>
+      <property name="minimumSize">
+       <size>
+        <width>318</width>
+        <height>250</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #12131e;
+border-radius: 10px</string>
+      </property>
      </widget>
+     <zorder>save_midi_label</zorder>
+     <zorder>save_midi_field</zorder>
+     <zorder>settings_4</zorder>
     </widget>
+    <widget class="QLabel" name="record_parameters_header_10">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>261</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>16</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(141, 146, 201)</string>
+     </property>
+     <property name="text">
+      <string>MIDI OUTPUT</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="midi_header">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>60</y>
+       <width>251</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>16</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(93, 98, 159);
+</string>
+     </property>
+     <property name="text">
+      <string>MIDI Parameters: </string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="about">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>50</y>
+      <width>385</width>
+      <height>74</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Ubuntu</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Plain</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Transform your voice to MIDI&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Set the parameters and start recording!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>10</number>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
