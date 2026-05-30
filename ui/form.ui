@@ -521,7 +521,7 @@ border-radius: 5px;
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>44</y>
+        <y>40</y>
         <width>171</width>
         <height>31</height>
        </rect>
@@ -739,7 +739,7 @@ QProgressBar::chunk:vertical {
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(56, 59, 94)</string>
+       <string notr="true">color: rgb(93, 98, 159)</string>
       </property>
       <property name="text">
        <string>Input Gain: </string>
@@ -855,7 +855,7 @@ QProgressBar::chunk:vertical {
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>40</y>
+       <y>30</y>
        <width>261</width>
        <height>21</height>
       </rect>
@@ -888,8 +888,9 @@ QProgressBar::chunk:vertical {
      <string>Checkout the git repo! https://github.com/sreyasaju/harmonize</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-radius: 5px;
-background-color: #45259b;</string>
+     <string notr="true">border-radius: 20px;
+background-color: #45259b;
+</string>
     </property>
     <property name="text">
      <string/>
@@ -900,8 +901,8 @@ background-color: #45259b;</string>
     </property>
     <property name="iconSize">
      <size>
-      <width>25</width>
-      <height>25</height>
+      <width>32</width>
+      <height>32</height>
      </size>
     </property>
     <property name="flat">
@@ -1059,7 +1060,7 @@ border-radius: 10px</string>
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>60</y>
+       <y>70</y>
        <width>251</width>
        <height>21</height>
       </rect>
@@ -1106,6 +1107,29 @@ border-radius: 10px</string>
     </property>
     <property name="margin">
      <number>10</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="record_parameters_header_11">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>120</y>
+      <width>371</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Ubuntu</family>
+      <pointsize>19</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(182, 194, 255)</string>
+    </property>
+    <property name="text">
+     <string>Copyright  2024-2026, Sreya Saju</string>
     </property>
    </widget>
   </widget>
