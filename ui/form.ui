@@ -637,9 +637,9 @@ border-radius: 5px;
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>50</y>
+        <y>44</y>
         <width>171</width>
-        <height>25</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -865,7 +865,7 @@ QProgressBar::chunk:vertical {
       <property name="geometry">
        <rect>
         <x>90</x>
-        <y>80</y>
+        <y>70</y>
         <width>21</width>
         <height>16</height>
        </rect>
@@ -887,7 +887,7 @@ QProgressBar::chunk:vertical {
        <rect>
         <x>150</x>
         <y>70</y>
-        <width>21</width>
+        <width>31</width>
         <height>16</height>
        </rect>
       </property>
@@ -900,7 +900,70 @@ QProgressBar::chunk:vertical {
        <string notr="true">color: rgb(83, 80, 120)</string>
       </property>
       <property name="text">
-       <string>0%</string>
+       <string>50%</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>70</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(83, 80, 120)</string>
+      </property>
+      <property name="text">
+       <string>100%</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>21</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(83, 80, 120)</string>
+      </property>
+      <property name="text">
+       <string>  L</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>41</x>
+        <y>80</y>
+        <width>20</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(83, 80, 120)</string>
+      </property>
+      <property name="text">
+       <string> R</string>
       </property>
      </widget>
     </widget>
