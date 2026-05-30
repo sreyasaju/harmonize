@@ -20,7 +20,7 @@ def midi_to_alphabet(midi_note):
 
 def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     # TEST: Use test_sample.wav for testing
-    wave_output_file = "test_sample.wav"
+    wave_output_file = "lily.wav"
     # wave_output_file = wave_output_file  # Original
     
     signal, sr = librosa.load(wave_output_file, sr=None)
@@ -83,7 +83,8 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
 
                 # note on for the current note
                 if stable_pitch is None:
-                    track.append(Message('note_on', note=midi_note, velocity=64, time=0))
+                    on_delta = current_time - last_time
+                    track.append(Message('note_on', note=midi_note, velocity=64, time=on_delta))
                     stable_pitch = test_pitch
                     last_time = current_time
 
@@ -105,9 +106,11 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
                 last_time = current_time
 
 
-     # note off for the last note
+    # note off for the last note
     if stable_pitch is not None:
-        track.append(Message('note_off', note=stable_pitch, velocity=64, time=0))
+        end_time = int(len(signal) / sr * ticks_per_second)
+        duration = max(0, end_time - last_time)
+        track.append(Message('note_off', note=stable_pitch, velocity=64, time=duration))
 
     # save the MIDI file
     midi_file.save(midi_output)
