@@ -118,14 +118,14 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>611</width>
+       <width>600</width>
        <height>171</height>
       </rect>
      </property>
      <property name="minimumSize">
       <size>
-       <width>480</width>
-       <height>156</height>
+       <width>600</width>
+       <height>170</height>
       </size>
      </property>
      <property name="styleSheet">
@@ -142,15 +142,15 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>310</y>
+       <y>320</y>
        <width>601</width>
-       <height>161</height>
+       <height>170</height>
       </rect>
      </property>
      <property name="minimumSize">
       <size>
-       <width>480</width>
-       <height>156</height>
+       <width>600</width>
+       <height>170</height>
       </size>
      </property>
      <property name="styleSheet">
