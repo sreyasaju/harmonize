@@ -170,7 +170,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_audio_update(self, peak_min, peak_max):
         try:
             # normalize to 0-100
-            left_val = min(100, int(abs(peak_min) / 32767 * 100))
+            left_val = min(100, int(abs(peak_min) / 32767 * 100)) # make +ve -> div by 32767 -> make % -> remove decimals -> cap at 100
             right_val = min(100, int(abs(peak_max) / 32767 * 100))
 
             level = max(left_val, right_val)
