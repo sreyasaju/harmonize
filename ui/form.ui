@@ -39,7 +39,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>40</y>
+      <y>30</y>
       <width>271</width>
       <height>91</height>
      </rect>
@@ -66,21 +66,7 @@
      <number>10</number>
     </property>
    </widget>
-   <widget class="QWidget" name="widget" native="true">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>477</x>
-      <y>12</y>
-      <width>409</width>
-      <height>98</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout"/>
-   </widget>
-   <widget class="QFrame" name="recordFrame">
+   <widget class="QFrame" name="record_midi_Frame">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -138,7 +124,7 @@
       <enum>QFrame::Shadow::Raised</enum>
      </property>
     </widget>
-    <widget class="QFrame" name="waveframe_2">
+    <widget class="QFrame" name="midiframe">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -210,6 +196,9 @@ background-color: #45259b;</string>
      <property name="checked">
       <bool>false</bool>
      </property>
+     <attribute name="buttonGroup">
+      <string notr="true">buttonGroup</string>
+     </attribute>
     </widget>
     <widget class="QPushButton" name="convertButton">
      <property name="enabled">
@@ -323,12 +312,12 @@ background-color: #45259b;</string>
       <string notr="true">buttonGroup</string>
      </attribute>
     </widget>
-    <widget class="QLabel" name="record_parameters_header_7">
+    <widget class="QLabel" name="mid_frame_label">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>280</y>
-       <width>251</width>
+       <width>111</width>
        <height>21</height>
       </rect>
      </property>
@@ -346,12 +335,12 @@ background-color: #45259b;</string>
       <string>MIDI RENDER</string>
      </property>
     </widget>
-    <widget class="QLabel" name="record_parameters_header_6">
+    <widget class="QLabel" name="record_frame_label">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>251</width>
+       <width>151</width>
        <height>21</height>
       </rect>
      </property>
@@ -370,7 +359,7 @@ background-color: #45259b;</string>
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="settings">
+   <widget class="QGroupBox" name="voice_settings">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -484,31 +473,8 @@ border-radius: 5px;
        <string>Record Parameters: </string>
       </property>
      </widget>
-     <widget class="QLabel" name="record_parameters_header_4">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>120</y>
-        <width>251</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Ubuntu</family>
-        <pointsize>16</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(56, 59, 94)</string>
-      </property>
-      <property name="text">
-       <string>Record Parameters: </string>
-      </property>
-     </widget>
     </widget>
-    <widget class="QGroupBox" name="midi_parameters_groupBox">
+    <widget class="QGroupBox" name="audio_parameters_groupBox">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -517,7 +483,7 @@ border-radius: 5px;
        <height>121</height>
       </rect>
      </property>
-     <widget class="QSlider" name="horizontalSlider">
+     <widget class="QSlider" name="gainSlider">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -722,7 +688,7 @@ QProgressBar::chunk:vertical {
        <enum>QProgressBar::Direction::BottomToTop</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="record_parameters_header_9">
+     <widget class="QLabel" name="input_gain_header">
       <property name="geometry">
        <rect>
         <x>90</x>
@@ -745,7 +711,7 @@ QProgressBar::chunk:vertical {
        <string>Input Gain: </string>
       </property>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="zero_perc">
       <property name="geometry">
        <rect>
         <x>90</x>
@@ -766,7 +732,7 @@ QProgressBar::chunk:vertical {
        <string>0%</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="fifty_perc">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -787,7 +753,7 @@ QProgressBar::chunk:vertical {
        <string>50%</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="hundred_perc">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -808,7 +774,7 @@ QProgressBar::chunk:vertical {
        <string>100%</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="L">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -829,7 +795,7 @@ QProgressBar::chunk:vertical {
        <string>  L</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="R">
       <property name="geometry">
        <rect>
         <x>41</x>
@@ -851,7 +817,7 @@ QProgressBar::chunk:vertical {
       </property>
      </widget>
     </widget>
-    <widget class="QLabel" name="record_parameters_header_8">
+    <widget class="QLabel" name="voice_input_header">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -928,7 +894,7 @@ background-color: #45259b;
      <string notr="true">background-color: #12131e;
 border-radius: 10px</string>
     </property>
-    <widget class="QGroupBox" name="record_parameter_groupBox_4">
+    <widget class="QGroupBox" name="midi_parameter">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -1009,31 +975,10 @@ background-color: #45259b</string>
        <number>10</number>
       </property>
      </widget>
-     <widget class="QGroupBox" name="settings_4">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>318</width>
-        <height>250</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>318</width>
-        <height>250</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #12131e;
-border-radius: 10px</string>
-      </property>
-     </widget>
      <zorder>save_midi_label</zorder>
      <zorder>save_midi_field</zorder>
-     <zorder>settings_4</zorder>
     </widget>
-    <widget class="QLabel" name="record_parameters_header_10">
+    <widget class="QLabel" name="midiOutput">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -1113,8 +1058,8 @@ border-radius: 10px</string>
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>120</y>
-      <width>371</width>
+      <y>110</y>
+      <width>441</width>
       <height>21</height>
      </rect>
     </property>
@@ -1122,18 +1067,22 @@ border-radius: 10px</string>
      <font>
       <family>Ubuntu</family>
       <pointsize>19</pointsize>
-      <bold>true</bold>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(182, 194, 255)</string>
+     <string notr="true">color: rgb(255, 255, 255)</string>
     </property>
     <property name="text">
-     <string>Copyright  2024-2026, Sreya Saju</string>
+     <string>Copyright © 2024-2026, Sreya Saju, MIT license</string>
     </property>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="layoutDirection">
+    <enum>Qt::LayoutDirection::RightToLeft</enum>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="../res.qrc"/>
