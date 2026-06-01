@@ -174,7 +174,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             right_val = min(100, int(abs(peak_max) / 32767 * 100))
 
             level = max(left_val, right_val)
-            if level < 33:
+            if level < 60:
                 color = "#46c280"  
             elif level < 80:
                 color = "#dbd374"  
