@@ -170,11 +170,11 @@ class Ui_MainWindow(object):
         self.audio_parameters_groupBox = QGroupBox(self.voice_settings)
         self.audio_parameters_groupBox.setObjectName(u"audio_parameters_groupBox")
         self.audio_parameters_groupBox.setGeometry(QRect(30, 170, 271, 121))
-        self.gainSlider = QSlider(self.audio_parameters_groupBox)
-        self.gainSlider.setObjectName(u"gainSlider")
-        self.gainSlider.setGeometry(QRect(80, 40, 171, 31))
-        self.gainSlider.setMinimumSize(QSize(0, 10))
-        self.gainSlider.setStyleSheet(u"QSlider:horizontal {\n"
+        self.gain_slider = QSlider(self.audio_parameters_groupBox)
+        self.gain_slider.setObjectName(u"gain_slider")
+        self.gain_slider.setGeometry(QRect(80, 40, 171, 31))
+        self.gain_slider.setMinimumSize(QSize(0, 10))
+        self.gain_slider.setStyleSheet(u"QSlider:horizontal {\n"
 "    padding: 10px;\n"
 "}\n"
 "\n"
@@ -242,15 +242,15 @@ class Ui_MainWindow(object):
 "    color: #4b4b5e;\n"
 "    height: 5px;\n"
 "}")
-        self.gainSlider.setMaximum(100)
-        self.gainSlider.setSingleStep(10)
-        self.gainSlider.setSliderPosition(50)
-        self.gainSlider.setTracking(False)
-        self.gainSlider.setOrientation(Qt.Orientation.Horizontal)
-        self.gainSlider.setInvertedAppearance(False)
-        self.gainSlider.setInvertedControls(True)
-        self.gainSlider.setTickPosition(QSlider.TickPosition.TicksBelow)
-        self.gainSlider.setTickInterval(5)
+        self.gain_slider.setMaximum(100)
+        self.gain_slider.setSingleStep(10)
+        self.gain_slider.setSliderPosition(50)
+        self.gain_slider.setTracking(False)
+        self.gain_slider.setOrientation(Qt.Orientation.Horizontal)
+        self.gain_slider.setInvertedAppearance(False)
+        self.gain_slider.setInvertedControls(True)
+        self.gain_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
+        self.gain_slider.setTickInterval(5)
         self.gain_left = QProgressBar(self.audio_parameters_groupBox)
         self.gain_left.setObjectName(u"gain_left")
         self.gain_left.setGeometry(QRect(0, 0, 21, 71))
