@@ -151,8 +151,6 @@ class RecordAudio(QFrame):
             self.peaks_min[-1] = peak_min
             self.peaks_max[-1] = peak_max
 
-        print(f"peak_min: {peak_min}, peak_max: {peak_max}")
-
         segments = []
         for x in range(0, self.write_head):
             start_point = (x, self.peaks_min[x])
