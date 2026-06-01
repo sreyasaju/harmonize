@@ -32,7 +32,7 @@ class RecordAudio(QFrame):
         self.wave_output_file = None
         self.record_thread = None
 
-        self.canvas_width = 1000  # matches figsize(10) * dpi(100)
+        self.canvas_width = 2000  # matches figsize(10) * dpi(100)
 
         self.write_head = 0
         self.peaks_min = np.zeros(self.canvas_width)
