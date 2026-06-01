@@ -33,9 +33,14 @@ class RecordAudio(QFrame):
         self.record_thread = None
 
         self.canvas_width = 1000  # matches figsize(10) * dpi(100)
+
         self.write_head = 0
         self.peaks_min = np.zeros(self.canvas_width)
         self.peaks_max = np.zeros(self.canvas_width)        
+
+        self.sample_peak = 0 # used for dynamic y-axis scaling based on audio peak values
+
+
 
         self.waveframe = waveframe
         self.fig = Figure(figsize=(10, 2), dpi=100) #10in2in would do
@@ -75,6 +80,7 @@ class RecordAudio(QFrame):
         self.write_head = 0
         self.peaks_min = np.zeros(self.canvas_width)
         self.peaks_max = np.zeros(self.canvas_width)
+        self.sample_peak = 0  # reset the sameple peak for new recording,  so that the y-axis scaling can adjust to the new audio levels ;)
 
         if self.recording:
             return
@@ -147,6 +153,11 @@ class RecordAudio(QFrame):
             end_point = (x, self.peaks_max[x])
             segments.append([start_point, end_point])
         
+        current_peak = max(abs(peak_min), abs(peak_max))
+        if current_peak > self.sample_peak:
+            self.sample_peak = current_peak
+            self.ax.set_ylim(-self.sample_peak, self.sample_peak)
+
         self.vlines.set_segments(segments)
 
         self.canvas.draw_idle() # redrawing...
