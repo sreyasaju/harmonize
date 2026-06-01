@@ -147,8 +147,6 @@ class RecordAudio(QFrame):
             end_point = (x, self.peaks_max[x])
             segments.append([start_point, end_point])
         
-        print(f"write_head: {self.write_head}, segments: {len(segments)}")
-
         self.vlines.set_segments(segments)
 
         self.canvas.draw_idle() # redrawing...
