@@ -29,6 +29,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.wave_output_file = None
         self.midi_output_file = None
         self.recorder = RecordAudio(self.waveframe)
+        # connect audio peak updates to UI gain meters
+        self.recorder.update_signal.connect(self.on_audio_update)
         self.recording = False
         self.audio_player = None
 
@@ -164,6 +166,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def update_status_bar(self, message):
         self.title.showMessage(message, 10000)
+
+    def on_audio_update(self, peak_min, peak_max):
+        try:
+            # normalize to 0-100
+            left_val = min(100, int(abs(peak_min) / 32767 * 100))
+            right_val = min(100, int(abs(peak_max) / 32767 * 100))
+
+            level = max(left_val, right_val)
+            if level < 33:
+                color = "#46c280"  
+            elif level < 80:
+                color = "#dbd374"  
+            else:
+                color = "#c97c77" 
+
+            style = (
+                "QProgressBar:vertical { border: 1px solid #2d2d3d; background: #11121a;"
+                " width: 12px; border-radius: 3px; }"
+                f"QProgressBar::chunk:vertical {{ background: {color}; border-radius: 2px; }}"
+            )
+
+            self.gain_left.setValue(left_val)
+            self.gain_right.setValue(right_val)
+            self.gain_left.setStyleSheet(style)
+            self.gain_right.setStyleSheet(style)
+        except Exception:
+            # avoid crashing the UI thread on unexpected errors
+            pass
 
     def show_error_message(self, message):
         QMessageBox.critical(self, "Error", message)
