@@ -251,11 +251,11 @@ class Ui_MainWindow(object):
         self.gainSlider.setInvertedControls(True)
         self.gainSlider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.gainSlider.setTickInterval(5)
-        self.progressBar = QProgressBar(self.audio_parameters_groupBox)
-        self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setGeometry(QRect(0, 0, 21, 71))
-        self.progressBar.setMinimumSize(QSize(19, 17))
-        self.progressBar.setStyleSheet(u"QProgressBar:vertical {\n"
+        self.gain_left = QProgressBar(self.audio_parameters_groupBox)
+        self.gain_left.setObjectName(u"gain_left")
+        self.gain_left.setGeometry(QRect(0, 0, 21, 71))
+        self.gain_left.setMinimumSize(QSize(19, 17))
+        self.gain_left.setStyleSheet(u"QProgressBar:vertical {\n"
 "    border: 1px solid #2d2d3d;\n"
 "    background: #11121a;\n"
 "    width: 12px;\n"
@@ -269,16 +269,16 @@ class Ui_MainWindow(object):
 "                                stop:0.9 #c97c77,);  /* Danger Red */\n"
 "    border-radius: 2px;\n"
 "}")
-        self.progressBar.setValue(60)
-        self.progressBar.setTextVisible(False)
-        self.progressBar.setOrientation(Qt.Orientation.Vertical)
-        self.progressBar.setInvertedAppearance(False)
-        self.progressBar.setTextDirection(QProgressBar.Direction.BottomToTop)
-        self.progressBar_3 = QProgressBar(self.audio_parameters_groupBox)
-        self.progressBar_3.setObjectName(u"progressBar_3")
-        self.progressBar_3.setGeometry(QRect(40, 0, 21, 71))
-        self.progressBar_3.setMinimumSize(QSize(19, 17))
-        self.progressBar_3.setStyleSheet(u"QProgressBar:vertical {\n"
+        self.gain_left.setValue(100)
+        self.gain_left.setTextVisible(False)
+        self.gain_left.setOrientation(Qt.Orientation.Vertical)
+        self.gain_left.setInvertedAppearance(False)
+        self.gain_left.setTextDirection(QProgressBar.Direction.BottomToTop)
+        self.gain_right = QProgressBar(self.audio_parameters_groupBox)
+        self.gain_right.setObjectName(u"gain_right")
+        self.gain_right.setGeometry(QRect(40, 0, 21, 71))
+        self.gain_right.setMinimumSize(QSize(19, 17))
+        self.gain_right.setStyleSheet(u"QProgressBar:vertical {\n"
 "    border: 1px solid #2d2d3d;\n"
 "    background: #11121a;\n"
 "    width: 12px;\n"
@@ -292,11 +292,11 @@ class Ui_MainWindow(object):
 "                                stop:0.9 #c97c77,);  /* Danger Red */\n"
 "    border-radius: 2px;\n"
 "}")
-        self.progressBar_3.setValue(60)
-        self.progressBar_3.setTextVisible(False)
-        self.progressBar_3.setOrientation(Qt.Orientation.Vertical)
-        self.progressBar_3.setInvertedAppearance(False)
-        self.progressBar_3.setTextDirection(QProgressBar.Direction.BottomToTop)
+        self.gain_right.setValue(100)
+        self.gain_right.setTextVisible(False)
+        self.gain_right.setOrientation(Qt.Orientation.Vertical)
+        self.gain_right.setInvertedAppearance(False)
+        self.gain_right.setTextDirection(QProgressBar.Direction.BottomToTop)
         self.input_gain_header = QLabel(self.audio_parameters_groupBox)
         self.input_gain_header.setObjectName(u"input_gain_header")
         self.input_gain_header.setGeometry(QRect(90, 10, 171, 21))
