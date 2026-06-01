@@ -136,6 +136,11 @@ class RecordAudio(QFrame):
 
     def _update_plot(self, peak_min, peak_max):
 
+        threshold = 95
+        if max(abs(peak_min), abs(peak_max)) < threshold:
+            peak_min = -10
+            peak_max = 10
+
         if self.write_head < self.canvas_width:
             self.peaks_min[self.write_head] = peak_min
             self.peaks_max[self.write_head] = peak_max
@@ -146,7 +151,8 @@ class RecordAudio(QFrame):
             self.peaks_min[-1] = peak_min
             self.peaks_max[-1] = peak_max
 
-    
+        print(f"peak_min: {peak_min}, peak_max: {peak_max}")
+
         segments = []
         for x in range(0, self.write_head):
             start_point = (x, self.peaks_min[x])
