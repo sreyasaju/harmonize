@@ -31,6 +31,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.recorder = RecordAudio(self.waveframe)
         # connect audio peak updates to UI gain meters
         self.recorder.update_signal.connect(self.on_audio_update)
+
+        # connect gain slider to recorder and make it update while dragging
+        self.gain_slider.setTracking(True)
+        self.gain_slider.valueChanged.connect(self.on_gain_changed)
+        self.on_gain_changed(self.gain_slider.value())
+
         self.recording = False
         self.audio_player = None
 
@@ -114,6 +120,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.show_error_message(f"An error occurred: {str(e)}")
 
         self.validate_inputs()
+
+    def on_gain_changed(self, value):
+        # convert slider value to actual gain multiplier
+        gain_multiplier = float(value) / 50.0
+        self.recorder.update_gain(gain_multiplier)
 
     def play_audio_action(self):
         if self.wave_output_file:
