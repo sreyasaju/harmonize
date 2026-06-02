@@ -60,9 +60,9 @@ class RecordAudio(QFrame):
         self.ax.axis('off')
 
         self.canvas = FigureCanvas(self.fig)
-        self.layout = QVBoxLayout(self.waveframe)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(self.canvas)
+        self.layout = QVBoxLayout(self.waveframe) # type: ignore
+        self.layout.setContentsMargins(0, 0, 0, 0) # type: ignore
+        self.layout.addWidget(self.canvas) # type: ignore
         self.canvas.draw()
         
         self.gain = 1.0
@@ -126,7 +126,7 @@ class RecordAudio(QFrame):
                 self.stream.close()
 
         # save the recorded audio to a file
-        with wave.open(self.wave_output_file, 'wb') as waveFile:
+        with wave.open(self.wave_output_file, 'wb') as waveFile: # type: ignore
             waveFile.setnchannels(channels)
             waveFile.setsampwidth(self.audio.get_sample_size(format))
             waveFile.setframerate(rate)
