@@ -99,8 +99,13 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
             test_pitch = None
             test_count = 0
 
+            piano_roll_notes = []
+
             if stable_pitch is not None:
                 duration = current_time - last_time
+                start_sec = last_time / ticks_per_second
+                duration_sec = duration / ticks_per_second
+                piano_roll_notes.append((start_sec,duration_sec,stable_pitch))
                 track.append(Message('note_off', note=stable_pitch, velocity=64, time=duration))
                 stable_pitch = None
                 last_time = current_time
@@ -110,9 +115,13 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     if stable_pitch is not None:
         end_time = int(len(signal) / sr * ticks_per_second)
         duration = max(0, end_time - last_time)
+        start_sec = last_time / ticks_per_second
+        duration_sec = duration / ticks_per_second
+        piano_roll_notes.append((start_sec,duration_sec,stable_pitch))
         track.append(Message('note_off', note=stable_pitch, velocity=64, time=duration))
 
     # save the MIDI file
     midi_file.save(midi_output)
+    return piano_roll_notes
     print(f"Saved MIDI to {midi_output}")
     
