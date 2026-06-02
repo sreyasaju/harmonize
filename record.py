@@ -40,8 +40,6 @@ class RecordAudio(QFrame):
 
         self.sample_peak = 0 # used for dynamic y-axis scaling based on audio peak values
 
-
-
         self.waveframe = waveframe
         self.fig = Figure(figsize=(10, 2), dpi=100) #10in2in would do
         self.ax = self.fig.add_subplot(111)
@@ -66,7 +64,8 @@ class RecordAudio(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.canvas)
         self.canvas.draw()
-
+        
+        self.gain = 1.0
     def get_output_dir(self):
         if getattr(sys, 'frozen', False):
             # user's home directory to avoid permission issues
@@ -99,10 +98,20 @@ class RecordAudio(QFrame):
 
             while self.recording:
                 data = self.stream.read(chunk, exception_on_overflow=False)
-                self.frames.append(data)
-                new_data = np.frombuffer(data, dtype=np.int16)
-                peak_max = new_data.max()
-                peak_min = new_data.min()
+
+                raw_data = np.frombuffer(data, dtype=np.int16)
+
+                if self.gain != 1.0:
+                    scaled_data = np.clip(raw_data.astype(np.float32)* self.gain, -32768, 32767) #synatx (array,min,max)
+                    scaled_data = scaled_data.astype(np.int16)
+                else:
+                    scaled_data = raw_data
+
+                self.frames.append(scaled_data.tobytes())
+
+                peak_max = int(scaled_data.max())
+                peak_min = int(scaled_data.min())
+
                 self.update_signal.emit(peak_min, peak_max)
 
 
@@ -125,6 +134,8 @@ class RecordAudio(QFrame):
 
         print(f"Recording saved to {self.wave_output_file}")
 
+    def update_gain(self, gain_value):
+        self.gain = float(gain_value)
 
     def stop_recording(self):
         if not self.recording:
