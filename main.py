@@ -158,7 +158,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             midi_dir = self.get_midi_dir()
             self.midi_output_file = os.path.join(midi_dir, midi_filename)
             # Use wave_output_file if it exists, otherwise convert_to_midi will use test_sample.wav
-            convert_to_midi(self.wave_output_file, self.midi_output_file)
+            notes = convert_to_midi(self.wave_output_file, self.midi_output_file)
+            
             msg = QMessageBox(self)
             msg.setWindowTitle("MIDI Conversion Success!")
             msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
