@@ -30,7 +30,12 @@ class MidiPlayback(QFrame):
             self.layout = QVBoxLayout(self.midiframe) # type: ignore
             self.layout.setContentsMargins(0, 0, 0, 0) # type: ignore
             self.layout.addWidget(self.canvas) # type: ignore
+
+            self.fig.patch.set_facecolor('#12131e')
+            self.ax.set_facecolor('#12131e')
+            self.ax.axis('off')
             self.canvas.draw()
+
 
             self.notes = [
                     (0.0, 1.0, 60),  # C4
