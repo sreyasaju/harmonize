@@ -50,7 +50,7 @@ class RecordAudio(QFrame):
             np.arange(self.canvas_width),
             self.peaks_min,
             self.peaks_max,
-            colors='#45259b'
+            colors="#00b0a4"
             )
 
         self.update_signal.connect(self._update_plot)
