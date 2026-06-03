@@ -8,6 +8,7 @@ from PySide6 import QtGui
 from ui.ui_form import Ui_MainWindow
 from record import RecordAudio
 from midi import convert_to_midi
+from midi_playback import MidiPlayback
 from playback import playAudio
 import sys
 
@@ -29,6 +30,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.wave_output_file = None
         self.midi_output_file = None
         self.recorder = RecordAudio(self.waveframe)
+
+        self.midi_player = MidiPlayback(self.midiframe)
+
         # connect audio peak updates to UI gain meters
         self.recorder.update_signal.connect(self.on_audio_update)
 
@@ -160,6 +164,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Use wave_output_file if it exists, otherwise convert_to_midi will use test_sample.wav
             notes = convert_to_midi(self.wave_output_file, self.midi_output_file)
             
+            self.midi_player.set_notes(notes)
+
             msg = QMessageBox(self)
             msg.setWindowTitle("MIDI Conversion Success!")
             msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
@@ -168,7 +174,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
             # else:
-            #     self.show_error_message("You need to record audio first!")
+            #    self.show_error_message("You need to record audio first!")
         except Exception as e:
             self.show_error_message(f"Error during MIDI conversion: {str(e)}")
 
