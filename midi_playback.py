@@ -22,6 +22,13 @@ class MidiPlayback(QFrame):
 
             self.fig = Figure(figsize=(10, 2), dpi=100) #10in2in would do
             self.ax = self.fig.add_subplot(111)
+            self.fig.subplots_adjust(
+                left=0,
+                right=1,
+                top=1,
+                bottom=0
+            )
+            
             self.ax.set_xlim(0, 100) # will be updated based on MIDI length
             self.ax.set_ylim(0, 127) # MIDI note range
             self.ax.axis('off')
@@ -36,7 +43,6 @@ class MidiPlayback(QFrame):
             self.ax.axis('off')
             self.canvas.draw()
 
-
             self.notes = [
                     (0.0, 1.0, 60),  # C4
                     (0.5, 0.5, 64),  # E4
@@ -44,7 +50,6 @@ class MidiPlayback(QFrame):
             ]
 
             self.midi_length = 0
-
 
         def load_midi(self, midi_file): 
               pass # TODO: will add later ;) for now just used set_notes with hardcoded notes for testing
@@ -54,11 +59,16 @@ class MidiPlayback(QFrame):
 
             self.ax.clear()
 
+            self.ax.set_facecolor('#12131e')
+            self.ax.axis('off')
+
             for start, duration, note in self.notes:
                 rect = Rectangle(
-                    (start, note - 0.4),  # x,y
+                    (start, note - 1.5),  # x,y
                     duration,             # width
-                    0.8                   # height
+                    1,                     # height
+                    facecolor='#00e8a2',
+                    edgecolor="none",
                 )
 
                 self.ax.add_patch(rect)
@@ -72,7 +82,6 @@ class MidiPlayback(QFrame):
                     if end_time > max_time:
                         max_time = end_time
                 
-
                 self.ax.set_xlim(0, max_time)
 
                 pitches = []
@@ -80,10 +89,15 @@ class MidiPlayback(QFrame):
                 for note in self.notes:
                     pitches.append(note[2])
 
-                self.ax.set_ylim(
-                    min(pitches) - 2,
-                    max(pitches) + 2
-                )
+                    pitch_min = min(pitches)
+                    pitch_max = max(pitches)
+
+                    padding = 1
+
+                    self.ax.set_ylim(
+                        pitch_min - padding,
+                        pitch_max + padding
+                    )
 
                 self.canvas.draw()
 
