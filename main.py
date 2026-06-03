@@ -174,7 +174,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
             # else:
-            #    self.show_error_message("You need to record audio first!")
+            #.  self.show_error_message("You need to record audio first!")
         except Exception as e:
             self.show_error_message(f"Error during MIDI conversion: {str(e)}")
 
