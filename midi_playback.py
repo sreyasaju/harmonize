@@ -64,12 +64,13 @@ class MidiPlayback(QFrame):
 
             for start, duration, note in self.notes:
                 rect = Rectangle(
-                    (start, note - 1.5),  # x,y
-                    duration,             # width
-                    1,                     # height
-                    facecolor='#00e8a2',
-                    edgecolor="none",
-                )
+                (start, note - 0.45),
+                max(duration, 0.03),
+                0.9,
+                facecolor="#00b0a4",
+                edgecolor="#00ffb3",
+                linewidth=0.5
+            )
 
                 self.ax.add_patch(rect)
 
