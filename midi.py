@@ -30,8 +30,8 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     rms_db = librosa.amplitude_to_db(rms, ref=np.max)
     n_rms_frames = rms_db.shape[1]
 
-    fmin = librosa.note_to_hz('C2')
-    fmax = librosa.note_to_hz('C7')
+    fmin = float(librosa.note_to_hz('C2'))
+    fmax = float(librosa.note_to_hz('C7'))
     pitches, voiced_flags, _ = librosa.pyin(signal, fmin=fmin, fmax=fmax, sr=sr) #voiced_flags is boolean -> noise vs silence. _ is confidence level of the pitch estimation
 
     midi_file = MidiFile()
@@ -46,6 +46,7 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
     last_pitch = None
     last_time = 0
 
+    piano_roll_notes = []
 
     stability_threshold = 3
     
@@ -75,11 +76,16 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
                 if stable_pitch is not None and stable_pitch != test_pitch:
                     duration = current_time - last_time
 
+                    start_sec = last_time / ticks_per_second
+                    duration_sec = duration / ticks_per_second
+
+                    piano_roll_notes.append(
+                        (start_sec, duration_sec, stable_pitch)
+                    )
                     track.append(Message('note_off', note=stable_pitch, velocity=64, time=duration))
 
                     stable_pitch = None
                     last_time = current_time
-
 
                 # note on for the current note
                 if stable_pitch is None:
@@ -95,17 +101,18 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
                         print(f"No alphabet mapping found for MIDI Note {midi_note}")
 
         else:
-
             test_pitch = None
             test_count = 0
 
-            piano_roll_notes = []
+            
 
             if stable_pitch is not None:
                 duration = current_time - last_time
+
                 start_sec = last_time / ticks_per_second
                 duration_sec = duration / ticks_per_second
                 piano_roll_notes.append((start_sec,duration_sec,stable_pitch))
+
                 track.append(Message('note_off', note=stable_pitch, velocity=64, time=duration))
                 stable_pitch = None
                 last_time = current_time
@@ -122,6 +129,6 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
 
     # save the MIDI file
     midi_file.save(midi_output)
-    return piano_roll_notes
     print(f"Saved MIDI to {midi_output}")
-    
+    print("Count:", len(piano_roll_notes))
+    return piano_roll_notes
