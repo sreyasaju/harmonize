@@ -358,15 +358,15 @@ background-color: #45259b;</string>
       <string>VOICE WAVEFORM</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="playButton_2">
+    <widget class="QPushButton" name="playmidiButton">
      <property name="enabled">
       <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>430</y>
-       <width>60</width>
+       <x>220</x>
+       <y>450</y>
+       <width>181</width>
        <height>60</height>
       </rect>
      </property>
@@ -378,21 +378,23 @@ background-color: #45259b;</string>
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <family>Ubuntu</family>
+       <pointsize>18</pointsize>
+       <bold>true</bold>
       </font>
      </property>
      <property name="toolTip">
-      <string>Play/ Pause your Voice!</string>
+      <string>Play/ Pause MIDI track</string>
      </property>
      <property name="statusTip">
-      <string>Play/Pause your Voice!</string>
+      <string>Play/Pause MIDI track</string>
      </property>
      <property name="styleSheet">
       <string notr="true">border-radius: 30px;
 background-color: #45259b;</string>
      </property>
      <property name="text">
-      <string/>
+      <string>PLAY MIDI</string>
      </property>
      <property name="icon">
       <iconset resource="../res.qrc">
