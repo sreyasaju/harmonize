@@ -46,6 +46,8 @@ class RecordAudio(QFrame):
         self.ax.set_xlim(0, self.canvas_width)
         self.ax.set_ylim(-32768, 32767)
 
+        self.ax.margins(x=0.03, y=0.03)
+
         self.vlines = self.ax.vlines(
             np.arange(self.canvas_width),
             self.peaks_min,

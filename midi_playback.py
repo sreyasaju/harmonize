@@ -23,11 +23,13 @@ class MidiPlayback(QFrame):
             self.fig = Figure(figsize=(10, 2), dpi=100) #10in2in would do
             self.ax = self.fig.add_subplot(111)
             self.fig.subplots_adjust(
-                left=0,
-                right=1,
-                top=1,
-                bottom=0
+                left=0.03,
+                right=0.97,
+                top=0.92,
+                bottom=0.08
             )
+
+            self.ax.margins(x=0.02, y=0.35)
             
             self.ax.set_xlim(0, 100) # will be updated based on MIDI length
             self.ax.set_ylim(0, 127) # MIDI note range

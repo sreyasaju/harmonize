@@ -1,3 +1,4 @@
+import os
 import librosa
 import numpy as np
 from mido import Message, MidiFile, MidiTrack
@@ -19,11 +20,13 @@ def midi_to_alphabet(midi_note):
     
 
 def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
-    # TEST: Use test_sample.wav for testing
-    wave_output_file = "lily.wav"
-    # wave_output_file = wave_output_file  # Original
-    
-    signal, sr = librosa.load(wave_output_file, sr=None)
+    fallback_audio = "lily.wav"
+    if wave_output_file and os.path.exists(wave_output_file):
+        input_file = wave_output_file
+    else:
+        input_file = fallback_audio
+
+    signal, sr = librosa.load(input_file, sr=None)
 
     # Calculate the RMS energy of the signal
     rms = librosa.feature.rms(y=signal, frame_length=2048, hop_length=512)
