@@ -20,6 +20,11 @@ channels = 1 # mono
 rate = 44100 #this is standard sample rate
 chunk = 1024 # number of frames per buffer
 
+
+BG_COLOR = "#12131e"
+RECORD_COLOR = "#00b5c9"
+
+
 class RecordAudio(QFrame):
     update_signal = Signal(float, float) #peak_min, peak_max
 
@@ -52,13 +57,13 @@ class RecordAudio(QFrame):
             np.arange(self.canvas_width),
             self.peaks_min,
             self.peaks_max,
-            colors="#00ffb3"
+            colors=RECORD_COLOR
             )
 
         self.update_signal.connect(self._update_plot)
 
-        self.fig.patch.set_facecolor('#12131e')
-        self.ax.set_facecolor('#12131e')
+        self.fig.patch.set_facecolor(BG_COLOR)
+        self.ax.set_facecolor(BG_COLOR)
         self.ax.axis('off')
 
         self.canvas = FigureCanvas(self.fig)
@@ -81,14 +86,18 @@ class RecordAudio(QFrame):
         self.write_head = 0
         self.peaks_min = np.zeros(self.canvas_width)
         self.peaks_max = np.zeros(self.canvas_width)
-        self.sample_peak = 0  # reset the sameple peak for new recording,  so that the y-axis scaling can adjust to the new audio levels ;)
+        self.sample_peak = 0  # reset the sample peak for new recording, so that the y-axis scaling can adjust to the new audio levels ;)
 
         if self.recording:
             return
         self.recording = True
         self.frames = []
-        output_dir = self.get_output_dir()
-        self.wave_output_file = os.path.join(output_dir, wave_output_file)
+
+        if os.path.isabs(wave_output_file):
+            self.wave_output_file = wave_output_file
+        else:
+            output_dir = self.get_output_dir()
+            self.wave_output_file = os.path.join(output_dir, wave_output_file)
 
         self.record_thread = threading.Thread(target=self._record)
         self.record_thread.start()
