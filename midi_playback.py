@@ -8,9 +8,15 @@ import matplotlib
 matplotlib.use("QtAgg", force=True)
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from PySide6.QtWidgets import QFrame, QVBoxLayout
-from PySide6.QtCore import Signal
-from matplotlib.patches import Rectangle
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QWidget
+from PySide6.QtCore import Signal, QTimer, Qt
+from matplotlib.patches import Circle, Rectangle
+from matplotlib.animation import FuncAnimation
+import math
+
+BG_COLOR = "#12131e"
+NOTE_COLOR = "#00a7b0"
+NOTE_EDGE_COLOR = "#00b5c9"
 
 
 class MidiPlayback(QFrame):
@@ -38,8 +44,8 @@ class MidiPlayback(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)  # type: ignore
         self.layout.addWidget(self.canvas)  # type: ignore
 
-        self.fig.patch.set_facecolor("#12131e")
-        self.ax.set_facecolor("#12131e")
+        self.fig.patch.set_facecolor(BG_COLOR)
+        self.ax.set_facecolor(BG_COLOR)
         self.ax.axis("off")
         self.canvas.draw()
 
@@ -60,7 +66,7 @@ class MidiPlayback(QFrame):
         self.notes = notes
 
         self.ax.clear()
-        self.ax.set_facecolor("#12131e")
+        self.ax.set_facecolor(BG_COLOR)
         self.ax.axis("off")
 
         for start, duration, note in self.notes:
@@ -68,8 +74,8 @@ class MidiPlayback(QFrame):
                 (start, note - 0.45),
                 max(duration, 0.03),
                 0.9,
-                facecolor="#00b0a4",
-                edgecolor="#00ffb3",
+                facecolor=NOTE_COLOR,
+                edgecolor=NOTE_EDGE_COLOR,
                 linewidth=0.5,
             )
             self.ax.add_patch(rect)
@@ -98,5 +104,35 @@ class MidiPlayback(QFrame):
         self.canvas.draw()
         # mark that notes have been displayed
         self.midi_displayed = True
+
+    def show_loader(self):
+        self.ax.clear()
+        self.ax.set_facecolor(BG_COLOR)
+
+        self.ax.axis("off")
+
+        x_pos = [0.2, 0.4, 0.6, 0.8]  # x-positions of the 4 blobs (in axes coordinates, 0=left 1=right)
+        y_pos = [0.5] * 4   # y-position of all 4 blobs [0.5, 0.5, 0.5, 0.5] (vertically centered)
+        radius  = 0.06  # radius of each blob
+
+        self.blobs = []
+
+        for x in x_pos:
+            circle = Circle((x, y_pos[0]), radius, color=NOTE_COLOR, transform=self.ax.transAxes, clip_on=False)
+            self.ax.add_patch(circle)
+            self.blobs.append(circle)
+
+        self.ax.set_xlim(0, 1)
+        self.ax.set_ylim(0, 1)
+        self.canvas.draw()
+
+        def _animate(frame):
+            for i, blob in enumerate(self.blobs):
+                t = (frame / 10.0 - i * 0.3) # dividing by 10 to slow down, and offsetting each blob by 0.3 to create a wave effect
+                size = 0.6 + 0.55 * abs(math.sin(math.pi * t)))
+
+
+
+
 
 
