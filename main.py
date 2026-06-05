@@ -23,6 +23,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.save_midi_field.textChanged.connect(self.validate_inputs)
         self.recordButton.clicked.connect(self.record_audio_action)
         self.playButton.clicked.connect(self.play_audio_action)
+        self.playmidiButton.clicked.connect(self.play_midi_action)
         self.convertButton.clicked.connect(self.convert_to_midi_action)
         self.gitbutton.clicked.connect(self.git_url_action)
         self.title = self.statusBar()
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.recording = False
         self.audio_player = None
+        self.midi_is_playing = False
 
         self.recordButton.setEnabled(False)
         self.playButton.setEnabled(False)
@@ -80,11 +82,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         wave_file_exists = bool(self.wave_output_file) and os.path.exists(self.wave_output_file or "")
         all_filled = bool(voice_filename and midi_filename)
         self.playButton.setEnabled(wave_file_exists)
+        midi_file_exists = bool(self.midi_output_file) and os.path.exists(self.midi_output_file or "")
+        self.playmidiButton.setEnabled(midi_file_exists)
         self.recordButton.setEnabled(all_filled)
         # Original: self.convertButton.setEnabled(wave_file_exists)
         # TEST: Enable convert button optionally for testing
         midi_filename_filled = bool(self.save_midi_field.text().strip())
-        self.convertButton.setEnabled(midi_filename_filled)
+        self.convertButton.setEnabled(midi_filename_filled and not self.recording)
 
     def record_audio_action(self):
         try:
@@ -177,6 +181,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             #.  self.show_error_message("You need to record audio first!")
         except Exception as e:
             self.show_error_message(f"Error during MIDI conversion: {str(e)}")
+
+        
+    def play_midi_action(self):
+        # Ensure a MIDI output file exists on disk
+        if self.midi_output_file and os.path.exists(self.midi_output_file):
+            if self.midi_is_playing:
+                # Pause MIDI playback (UI-only toggle for now)
+                self.midi_is_playing = False
+                self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/play.svg"))
+                self.playmidiButton.setText("PLAY MIDI")
+                self.update_status_bar("MIDI Playback paused")
+            else:
+                # Start MIDI playback (UI-only toggle for now)
+                self.midi_is_playing = True
+                self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/pause.svg"))
+                self.playmidiButton.setText("PAUSE MIDI")
+                self.update_status_bar(f"MIDI Playback playing {self.midi_output_file}")
+        else:
+            self.show_error_message("No MIDI file to play!")
+        self.validate_inputs()
+
 
     def git_url_action(self):
         url = "https://github.com/sreyasaju/harmonize"
