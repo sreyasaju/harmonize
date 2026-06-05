@@ -49,6 +49,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.recordButton.setEnabled(False)
         self.playButton.setEnabled(False)
         self.convertButton.setEnabled(False)
+        self.playmidiButton.setEnabled(False)
 
     def get_output_dir(self):
         """Get the base output directory.
@@ -81,9 +82,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         midi_filename = self.save_midi_field.text().strip() if self.save_midi_field.text() else ''
         wave_file_exists = bool(self.wave_output_file) and os.path.exists(self.wave_output_file or "")
         all_filled = bool(voice_filename and midi_filename)
-        self.playButton.setEnabled(wave_file_exists)
-        midi_file_exists = bool(self.midi_output_file) and os.path.exists(self.midi_output_file or "")
-        self.playmidiButton.setEnabled(midi_file_exists)
+        self.playButton.setEnabled(wave_file_exists and not self.recording)
+
+        midi_displayed = getattr(self.midi_player, 'midi_displayed', False)
+        self.playmidiButton.setEnabled(midi_displayed)
+        
         self.recordButton.setEnabled(all_filled)
         # Original: self.convertButton.setEnabled(wave_file_exists)
         # TEST: Enable convert button optionally for testing
@@ -169,6 +172,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             notes = convert_to_midi(self.wave_output_file, self.midi_output_file)
             
             self.midi_player.set_notes(notes)
+            self.validate_inputs()
 
             msg = QMessageBox(self)
             msg.setWindowTitle("MIDI Conversion Success!")

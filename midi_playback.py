@@ -51,6 +51,8 @@ class MidiPlayback(QFrame):
 
         self.midi_length = 0
 
+        self.midi_displayed = False
+
     def load_midi(self, midi_file): 
         pass # TODO: will add later ;) for now just used set_notes with hardcoded notes for testing
 
@@ -94,5 +96,7 @@ class MidiPlayback(QFrame):
             )
 
         self.canvas.draw()
+        # mark that notes have been displayed
+        self.midi_displayed = True
 
 
