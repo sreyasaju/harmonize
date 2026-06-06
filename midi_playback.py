@@ -61,8 +61,14 @@ class MidiPlayback(QFrame):
 
     def load_midi(self, midi_file): 
         pass # TODO: will add later ;) for now just used set_notes with hardcoded notes for testing
+    
+    def stop_loader(self):
+        if hasattr(self, '_loader_animation') and self._loader_animation is not None:
+            self._loader_animation.event_source.stop()
+            self._loader_animation = None
 
     def set_notes(self, notes):
+        self.stop_loader()
         self.notes = notes
 
         self.ax.clear()
@@ -111,28 +117,27 @@ class MidiPlayback(QFrame):
 
         self.ax.axis("off")
 
-        x_pos = [0.2, 0.4, 0.6, 0.8]  # x-positions of the 4 blobs (in axes coordinates, 0=left 1=right)
-        y_pos = [0.5] * 4   # y-position of all 4 blobs [0.5, 0.5, 0.5, 0.5] (vertically centered)
-        radius  = 0.06  # radius of each blob
+        x_positions = [0.2, 0.4, 0.6, 0.8]  # x-positions of the 4 blobs (in axes coordinates, 0=left 1=right)
+        radius = 0.06
+        amplitude = 0.04
+        phase_step = 0.8 # offset between the blobs (radians)
 
         self.blobs = []
 
-        for x in x_pos:
-            circle = Circle((x, y_pos[0]), radius, color=NOTE_COLOR, transform=self.ax.transAxes, clip_on=False)
+        for x in x_positions:
+            circle = Circle((x, 0.5), radius, color=NOTE_COLOR, transform=self.ax.transAxes, clip_on=False)
+
             self.ax.add_patch(circle)
             self.blobs.append(circle)
 
-        self.ax.set_xlim(0, 1)
-        self.ax.set_ylim(0, 1)
-        self.canvas.draw()
-
-        def _animate(frame):
+        
+        def animate(frame):
+            t = frame * 0.045
             for i, blob in enumerate(self.blobs):
-                t = (frame / 10.0 - i * 0.3) # dividing by 10 to slow down, and offsetting each blob by 0.3 to create a wave effect
-                size = 0.6 + 0.55 * abs(math.sin(math.pi * t))
-
-
-
-
-
-
+                r = radius + amplitude * math.sin(t + i * phase_step)
+                blob.set_radius(r)
+                blob.set_facecolor(NOTE_COLOR)
+            return self.blobs
+        
+        self._loader_animation = FuncAnimation(self.fig, animate, frames=200, interval=50, blit=True, cache_frame_data=False)
+        self.canvas.draw()
