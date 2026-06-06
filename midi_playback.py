@@ -129,7 +129,7 @@ class MidiPlayback(QFrame):
         def _animate(frame):
             for i, blob in enumerate(self.blobs):
                 t = (frame / 10.0 - i * 0.3) # dividing by 10 to slow down, and offsetting each blob by 0.3 to create a wave effect
-                size = 0.6 + 0.55 * abs(math.sin(math.pi * t)))
+                size = 0.6 + 0.55 * abs(math.sin(math.pi * t))
 
 
 
