@@ -3,6 +3,8 @@ os.environ["NUMBA_DISABLE_JIT"] = "1"
 import webbrowser
 
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide6.QtCore import QThread, Signal as QtSignal
+
 from PySide6 import QtGui
 
 from ui.ui_form import Ui_MainWindow
@@ -13,6 +15,22 @@ from playback import playAudio
 import sys
 
 import res_rc
+
+class ConvertWorker(QThread):
+    finished = QtSignal(list)
+    error = QtSignal(str)
+
+    def __init__(self, wave_file, midi_output):
+        super().__init__()
+        self.wave_file = wave_file
+        self.midi_output = midi_output
+
+    def run(self):
+        try:
+            notes = convert_to_midi(self.wave_file, self.midi_output)
+            self.finished.emit(notes)
+        except Exception as e:
+            self.error.emit(str(e)) 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -168,9 +186,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             midi_dir = self.get_midi_dir()
             self.midi_output_file = os.path.join(midi_dir, midi_filename)
-            # Use wave_output_file if it exists, otherwise convert_to_midi will use test_sample.wav
-            notes = convert_to_midi(self.wave_output_file, self.midi_output_file)
-            
+
+            self.midi_player.show_loader()
+            self.convertButton.setEnabled(False)
+
+            self._worker = ConvertWorker(self.wave_output_file, self.midi_output_file)
+            self._worker.finished.connect(self._on_conversion_done)
+            self._worker.error.connect(self._on_conversion_error)
+            self._worker.start()
+
+        except Exception as e:
+            self.show_error_message(f"Error duing MIDI conversion: {str(e)}")
+
+    def _on_conversion_done(self, notes):
             self.midi_player.set_notes(notes)
             self.validate_inputs()
 
@@ -181,11 +209,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.exec()
             self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
-            # else:
-            #.  self.show_error_message("You need to record audio first!")
-        except Exception as e:
-            self.show_error_message(f"Error during MIDI conversion: {str(e)}")
-
+    def _on_conversion_error(self, error_msg):
+        self.midi_player.stop_loader()      # clean up loader on error too
+        self.show_error_message(f"Error during MIDI conversion: {error_msg}")
+        self.validate_inputs()
         
     def play_midi_action(self):
         # Ensure a MIDI output file exists on disk
