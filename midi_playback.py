@@ -1,6 +1,8 @@
 import os
 import sys
 import wave
+import subprocess
+import tempfile
 
 import numpy as np
 import matplotlib
@@ -16,6 +18,8 @@ import math
 BG_COLOR = "#12131e"
 NOTE_COLOR = "#00a7b0"
 NOTE_EDGE_COLOR = "#00b5c9"
+
+SOUNDFONT_PATH = os.path.join(os.path.dirname(__file__), "assets/Synth_Bamboo_Flute.sf2")
 
 
 class MidiPlayback(QFrame):
@@ -60,9 +64,15 @@ class MidiPlayback(QFrame):
             (1.0, 1.0, 67),  # G4
         ]
 
-        self.midi_length = 0
+        self.midi_length = 0.0
 
         self.midi_displayed = False
+
+        self.playhead = None
+        self.playhead_timer = QTimer(self)
+        self.playhead_timer.timeout.connect(self._update_playhead)
+        self.playhead_pos = 0.0
+        self.playhead_speed = 1.0  # seconds of MIDI time per real second
 
     def load_midi(self, midi_file): 
         pass # TODO: will add later ;) for now just used set_notes with hardcoded notes for testing
@@ -99,6 +109,7 @@ class MidiPlayback(QFrame):
                 if end_time > max_time:
                     max_time = end_time
 
+            self.midi_length = max_time
             self.ax.set_xlim(0, max_time)
 
             pitches = [note[2] for note in self.notes]
@@ -116,11 +127,16 @@ class MidiPlayback(QFrame):
         self.midi_displayed = True
 
         # playhead init
-        self.playhead = self.ax.axvline(x=0, color="#737191", linewidth=1, alpha=0.6, visible=False)
-        self.playhead_timer = QTimer(self)
-        self.playhead_timer.timeout.connect(self._update_playhead)
-        self.playhead_pos = 0.0
-        self.playhead_speed = 1.0  # seconds of MIDI time per real second
+        if self.playhead is not None:
+            self.playhead.remove()
+
+        self.playhead = self.ax.axvline(
+            x=0,
+            color="#737191",
+            linewidth=1,
+            alpha=0.6,
+            visible=False,
+        )
 
     def start_playhead(self):
         self.playhead.set_visible(True)
@@ -128,11 +144,6 @@ class MidiPlayback(QFrame):
 
     def stop_playhead(self):
         self.playhead_timer.stop()
-        self.canvas.draw_idle()
-
-    def _update_playhead(self):
-        self.playhead_pos += 0.033 * self.playhead_speed  # advance by ~33ms per tick
-        self.playhead.set_xdata([self.playhead_pos, self.playhead_pos])
         self.canvas.draw_idle()
 
     def reset_playhead(self):
@@ -186,21 +197,49 @@ class MidiPlayback(QFrame):
             self.ax.add_patch(blob)
             self.blobs.append(blob)
 
-        
         self.loader_frame = 0
         self.canvas.draw_idle()
         self.loader_timer.start(16)   # ~60fps
-        
+
+    def _update_playhead(self):
+        self.playhead_pos += 0.033 * self.playhead_speed
+
+        if self.playhead_pos >= self.midi_length:
+            self.stop_playhead()
+            return
+
+        if self.playhead:
+            self.playhead.set_xdata([self.playhead_pos, self.playhead_pos])
+
+        self.canvas.draw_idle()
 
     def update_loader(self):
         self.loader_frame += 1
-
         t = self.loader_frame * 0.15
 
         for i, blob in enumerate(self.blobs):
             scale = math.sin(t + i * 0.8)
-
             blob.width = self._blob_base_w + self._blob_amp_w * scale
             blob.height = self._blob_base_h + self._blob_amp_h * scale
-
         self.canvas.draw_idle()
+
+def render_midi_to_wav(midi_path, soundfont_path=SOUNDFONT_PATH, gain=3.0):
+    """Render MIDI to a temp WAV file using fluidsynth. Returns the WAV path."""
+    tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+    tmp.close()
+    try:
+        subprocess.run([
+            "fluidsynth",
+            "-ni",
+            "-g", str(gain),          # gain — default is 0.2, so 3.0 is much louder
+            "-F", tmp.name,
+            soundfont_path,
+            midi_path,
+        ], check=True)
+    except subprocess.CalledProcessError as e:
+        print("FluidSynth render failed:", e)
+        return None
+
+    return tmp.name
+
+
