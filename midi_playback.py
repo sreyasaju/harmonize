@@ -2,6 +2,7 @@ import os
 import subprocess
 import tempfile
 import shutil
+import sys
 
 import numpy as np
 import matplotlib
@@ -23,8 +24,15 @@ BG_COLOR = "#12131e"
 NOTE_COLOR = "#00b0a4"
 NOTE_EDGE_COLOR = "#00c9ab"
 
-SOUNDFONT_PATH = os.path.join(os.path.dirname(__file__), "assets/Synth_Bamboo_Flute.sf2")
+def _get_asset_path(relative_path):
+    """Get path to bundled asset, works for dev and PyInstaller."""
+    if getattr(sys, 'frozen', False):
+        base = sys._MEIPASS
+    else:
+        base = os.path.dirname(__file__)
+    return os.path.join(base, relative_path)
 
+SOUNDFONT_PATH = _get_asset_path("assets/Synth_Bamboo_Flute.sf2")
 
 class MidiPlayback(QFrame):
     def __init__(self, midiframe, parent=None):
