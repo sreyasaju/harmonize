@@ -1,63 +1,73 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs, collect_all
+from PyInstaller.utils.hooks import collect_all, collect_data_files
 
-# Collect everything PySide6 needs
-pyside6_datas, pyside6_binaries, pyside6_hidden = collect_all('PySide6')
+block_cipher = None
 
-# Collect librosa's data files (it needs its own internal data)
-librosa_datas = collect_data_files('librosa')
+# --- PySide6 ---
+pyside6_datas, pyside6_binaries, pyside6_hidden = collect_all("PySide6")
 
-# Collect numba data (librosa depends on it)
-numba_datas = collect_data_files('numba')
+pyside6_hidden = [
+    x for x in pyside6_hidden
+    if "WebEngine" not in x
+]
+
+pyside6_binaries = [
+    b for b in pyside6_binaries
+    if "WebEngine" not in b[0]
+]
+
+# --- audio libs ---
+librosa_datas = collect_data_files("librosa")
+numba_datas = collect_data_files("numba")
+scipy_datas = collect_data_files("scipy")
 
 a = Analysis(
-    ['main.py'],
-    pathex=[],
+    ["main.py"],
+
+    pathex=["."],
+
     binaries=pyside6_binaries,
-    datas=pyside6_datas + librosa_datas + numba_datas,
+
+    datas=pyside6_datas + librosa_datas + numba_datas + scipy_datas + [
+        ("assets", "assets"),
+        ("ui", "ui"),
+        ("lily.wav", "."),
+        ("sample_pitches.txt", "."),
+        ("res_rc.py", "."),
+    ],
     hiddenimports=pyside6_hidden + [
-        'PySide6.QtCore',
-        'PySide6.QtGui',
-        'PySide6.QtWidgets',
-        'PySide6.QtMultimedia',
-        'librosa',
-        'librosa.core',
-        'librosa.feature',
-        'librosa.util',
-        'soundfile',
-        'audioread',
-        'mido',
-        'pyaudio',
-        'pydub',
-        'scipy.signal',
-        'scipy.fft',
-        'numba',
-        'sklearn',
-        'sklearn.utils._cython_blas',
+        "PySide6.QtCore",
+        "PySide6.QtGui",
+        "PySide6.QtWidgets",
+        "PySide6.QtMultimedia",
+
+        "sounddevice",
+        "soundfile",
+        "mido",
+        "numpy",
+        "scipy",
+        "librosa",
+        "numba",
+        "llvmlite",
+        "sklearn",
+        "joblib",
+        "cffi",
+        "pydub",
     ],
-    hookspath=[],
-    hooksconfig={},
-    runtime_hooks=[],
+
     excludes=[
-        'PyQt5',
-        'PyQt5.QtCore',
-        'PyQt5.QtGui',
-        'PyQt5.QtWidgets',
-        'PyQt5.QtMultimedia',
-        'PyQt6',
-        'PyQt6.QtCore',
-        'PyQt6.QtGui',
-        'PyQt6.QtWidgets',
-        'PyQt6.QtMultimedia',
-        'tkinter',
-        '_tkinter',
+        "PyQt5",
+        "PyQt6",
+        "tkinter",
+        "_tkinter",
     ],
+    runtime_hooks=["rthooks/qt_patch.py"],
     noarchive=False,
     optimize=0,
 )
 
-pyz = PYZ(a.pure)
+pyz = PYZ(a.pure, cipher=block_cipher)
 
 exe = EXE(
     pyz,
@@ -65,24 +75,13 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='harmonize',
+    name="harmonize",
     debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    runtime_tmpdir=None,
-    console=False,          # False = no terminal window, GUI only
-    disable_windowed_traceback=False,
-    argv_emulation=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
+    console=False,
 )
 
 app = BUNDLE(
     exe,
-    name='harmonize.app',
-    icon=None,
-    bundle_identifier='com.sreyasaju.harmonize',
+    name="harmonize.app",
+    bundle_identifier="com.sreyasaju.harmonize",
 )
