@@ -110,10 +110,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.playmidiButton.setEnabled(midi_displayed)
         
         self.recordButton.setEnabled(all_filled)
-        # Original: self.convertButton.setEnabled(wave_file_exists)
-        # TEST: Enable convert button optionally for testing
+        
         midi_filename_filled = bool(self.save_midi_field.text().strip())
-        self.convertButton.setEnabled(midi_filename_filled and not self.recording)
+
+        self.convertButton.setEnabled(wave_file_exists and not self.recording and midi_filename_filled )
 
     def record_audio_action(self):
         try:
