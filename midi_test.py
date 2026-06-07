@@ -1,6 +1,5 @@
 import librosa
 import numpy as np
-from mido import Message, MidiFile, MidiTrack
 
 wave_output_file = "test_sample.wav"
 debugged_pitches_file = "debugged_pitches.txt"

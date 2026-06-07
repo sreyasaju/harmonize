@@ -2,7 +2,6 @@ import os
 import librosa
 import numpy as np
 from mido import Message, MidiFile, MidiTrack
-import scipy.signal
 from mido import MetaMessage
 
 
@@ -107,8 +106,6 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
             test_pitch = None
             test_count = 0
 
-            
-
             if stable_pitch is not None:
                 duration = current_time - last_time
 
@@ -119,7 +116,6 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
                 track.append(Message('note_off', note=stable_pitch, velocity=64, time=duration))
                 stable_pitch = None
                 last_time = current_time
-
 
     # note off for the last note
     if stable_pitch is not None:
