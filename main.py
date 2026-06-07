@@ -187,6 +187,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             midi_dir = self.get_midi_dir()
             self.midi_output_file = os.path.join(midi_dir, midi_filename)
 
+            self.midi_player.reset_playhead()
             self.midi_player.show_loader()
             self.convertButton.setEnabled(False)
 
@@ -199,9 +200,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.show_error_message(f"Error duing MIDI conversion: {str(e)}")
 
     def _on_conversion_done(self, notes):
+            self._rendered_wav = None        # force re-render for new MIDI
+            self.midi_audio_player = None    # reset player 
             self.midi_player.set_notes(notes)
-
-            self.midi_player.reset_playhead()          
+            self.midi_player.reset_playhead()
             self.midi_is_playing = False
 
             self.validate_inputs()
@@ -231,6 +233,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/pause.svg"))
                 self.playmidiButton.setText("PAUSE MIDI")
                 self.midi_player.start_playhead() 
+
+                # render of first play resuse on resume
+
+                if not hasattr(self, '_rendered_wav') or self._rendered_wav is None:
+                    try:
+                        from midi_playback import render_midi_to_wav
+                        self._rendered_wav = render_midi_to_wav(self.midi_output_file)
+                    except Exception as e:
+                        self.show_error_message(f"Failed to render MIDI audio: {e}")
+                        self.midi_is_playing = False
+                        return
+                
+                if self.midi_audio_player is None:
+                    self.midi_audio_player = playAudio(self._rendered_wav)
+                self.midi_audio_player.play()
                 self.update_status_bar(f"MIDI Playback playing {self.midi_output_file}")
         else:
             self.show_error_message("No MIDI file to play!") 
