@@ -20,8 +20,8 @@ import threading
 
 
 BG_COLOR = "#12131e"
-NOTE_COLOR = "#00a7b0"
-NOTE_EDGE_COLOR = "#00b5c9"
+NOTE_COLOR = "#00b0a4"
+NOTE_EDGE_COLOR = "#00c9ab"
 
 SOUNDFONT_PATH = os.path.join(os.path.dirname(__file__), "assets/Synth_Bamboo_Flute.sf2")
 
@@ -192,7 +192,7 @@ class MidiPlayback(QFrame):
 
         self.blobs = []
 
-        self._blob_base_w = radius_in_axes_x * 3
+        self._blob_base_w = radius_in_axes_x * 2.3
         self._blob_base_h = radius_in_axes_y * 2
 
 

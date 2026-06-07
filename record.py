@@ -22,7 +22,7 @@ chunk = 1024 # number of frames per buffer
 
 
 BG_COLOR = "#12131e"
-RECORD_COLOR = "#00b5c9"
+RECORD_COLOR = "#00b0a4"
 
 
 class RecordAudio(QFrame):
