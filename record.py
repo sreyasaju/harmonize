@@ -104,7 +104,13 @@ class RecordAudio(QFrame):
 
     def _record(self):
         try: 
-            self.stream = self.audio.open(format=format, channels=channels, rate=rate, input=True, frames_per_buffer=chunk)
+            try:
+                self.stream = self.audio.open(format=format, channels=channels, rate=rate, input=True, frames_per_buffer=chunk)
+            except Exception as stream_error:
+                print(f"CRITICAL: Failed to open audio stream: {stream_error}")
+                print(f"PyAudio device info: {self.audio.get_device_count()} devices found")
+                raise
+            
             print("Recording started...")
 
             while self.recording:
@@ -128,6 +134,8 @@ class RecordAudio(QFrame):
 
         except Exception as e:
             print(f"Error during recording: {e}")
+            import traceback
+            traceback.print_exc()
 
         finally:
             self.recording = False
