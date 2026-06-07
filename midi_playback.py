@@ -3,6 +3,7 @@ import sys
 import wave
 import subprocess
 import tempfile
+import shutil
 
 import numpy as np
 import matplotlib
@@ -14,6 +15,11 @@ from PySide6.QtWidgets import QFrame, QVBoxLayout, QWidget
 from PySide6.QtCore import Signal, QTimer, Qt
 from matplotlib.patches import Ellipse, Rectangle
 import math
+
+import sounddevice as sd
+import soundfile as sf
+import threading
+
 
 BG_COLOR = "#12131e"
 NOTE_COLOR = "#00a7b0"
@@ -73,6 +79,7 @@ class MidiPlayback(QFrame):
         self.playhead_timer.timeout.connect(self._update_playhead)
         self.playhead_pos = 0.0
         self.playhead_speed = 1.0  # seconds of MIDI time per real second
+
 
     def load_midi(self, midi_file): 
         pass # TODO: will add later ;) for now just used set_notes with hardcoded notes for testing
@@ -139,6 +146,16 @@ class MidiPlayback(QFrame):
         )
 
     def start_playhead(self):
+        # Ensure a playhead line exists before using it
+        if self.playhead is None:
+            self.playhead = self.ax.axvline(
+                x=0,
+                color="#737191",
+                linewidth=1,
+                alpha=0.6,
+                visible=False,
+            )
+
         self.playhead.set_visible(True)
         self.playhead_timer.start(33)  # ~30fps
 
@@ -149,10 +166,13 @@ class MidiPlayback(QFrame):
     def reset_playhead(self):
         self.stop_playhead()
         self.playhead_pos = 0.0
-        if hasattr(self, 'playhead'):
+        if getattr(self, 'playhead', None) is not None:
             self.playhead.set_xdata([0, 0])
             self.playhead.set_visible(False)
-            self.canvas.draw_idle()
+        # rewind view to show beginning of roll
+        if self.notes:
+            self.ax.set_xlim(0, self.midi_length)
+        self.canvas.draw_idle()
 
     def show_loader(self):
         self.loader_timer.stop()
@@ -211,6 +231,13 @@ class MidiPlayback(QFrame):
         if self.playhead:
             self.playhead.set_xdata([self.playhead_pos, self.playhead_pos])
 
+        # scroll x-axis window when playhead reaches 80% of visible range
+        x_min, x_max = self.ax.get_xlim()
+        view_width = x_max - x_min
+        if self.playhead_pos > x_min + view_width * 0.8:
+            new_min = self.playhead_pos - view_width * 0.2
+            self.ax.set_xlim(new_min, new_min + view_width)
+
         self.canvas.draw_idle()
 
     def update_loader(self):
@@ -223,10 +250,94 @@ class MidiPlayback(QFrame):
             blob.height = self._blob_base_h + self._blob_amp_h * scale
         self.canvas.draw_idle()
 
+
+class AudioPlayer:
+    def __init__(self):
+        self.data = None
+        self.samplerate = None
+        self._pos = 0
+        self._paused = threading.Event()
+        self._paused.set()  # set = playing, clear = paused
+        self._stream = None
+        self._lock = threading.Lock()
+
+        self._finished = False
+
+    def load(self, wav_path):
+        data, sr = sf.read(wav_path, dtype="float32")
+
+        self._finished = False
+
+        if data.ndim == 1:
+            data = data[:, np.newaxis]
+        with self._lock:
+            self.data = data
+            self.samplerate = sr
+            self._pos = 0
+
+    def _callback(self, outdata, frames, time, status):
+        with self._lock:
+            if not self._paused.is_set() or self.data is None:
+                outdata[:] = np.zeros((frames, self.data.shape[1] if self.data is not None else 1))
+                return
+            chunk = self.data[self._pos : self._pos + frames]
+        if len(chunk) < frames:
+            outdata[: len(chunk)] = chunk
+            outdata[len(chunk) :] = 0
+            self._pos = 0                  # rewind
+            self._paused.clear()           # pause so next play() starts fresh
+            self._finished = True          # signal that playback ended
+        else:
+            outdata[:] = chunk
+            self._pos += frames
+
+    def play(self):
+        if self.data is None:
+            return
+        if self._stream is not None:
+            return  # already playing, use resume()
+        self._pos = 0
+        self._paused.set()
+        self._stream = sd.OutputStream(
+            samplerate=self.samplerate,
+            channels=self.data.shape[1],
+            callback=self._callback,
+        )
+        self._stream.start()
+
+    def pause(self):
+        self._paused.clear()
+
+    def resume(self):
+        self._paused.set()
+
+    def stop(self):
+        if self._stream:
+            self._stream.stop()
+            self._stream.close()
+            self._stream = None
+        with self._lock:
+            self._pos = 0
+        self._paused.set()
+
+        self._finished = False
+
+    @property
+    def position_seconds(self):
+        with self._lock:
+            if self.samplerate:
+                return self._pos / self.samplerate
+            return 0.0
+
 def render_midi_to_wav(midi_path, soundfont_path=SOUNDFONT_PATH, gain=3.0):
     """Render MIDI to a temp WAV file using fluidsynth. Returns the WAV path."""
     tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
     tmp.close()
+    # Ensure fluidsynth is available
+    if shutil.which("fluidsynth") is None:
+        print("fluidsynth not found; please install fluidsynth to render MIDI.")
+        return None
+
     try:
         subprocess.run([
             "fluidsynth",
@@ -236,6 +347,9 @@ def render_midi_to_wav(midi_path, soundfont_path=SOUNDFONT_PATH, gain=3.0):
             soundfont_path,
             midi_path,
         ], check=True)
+    except FileNotFoundError:
+        print("fluidsynth executable not found when attempting to run it.")
+        return None
     except subprocess.CalledProcessError as e:
         print("FluidSynth render failed:", e)
         return None
