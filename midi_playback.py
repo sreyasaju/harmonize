@@ -1,6 +1,4 @@
 import os
-import sys
-import wave
 import subprocess
 import tempfile
 import shutil
@@ -11,8 +9,8 @@ import matplotlib
 matplotlib.use("QtAgg", force=True)
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from PySide6.QtWidgets import QFrame, QVBoxLayout, QWidget
-from PySide6.QtCore import Signal, QTimer, Qt
+from PySide6.QtWidgets import QFrame, QVBoxLayout
+from PySide6.QtCore import QTimer
 from matplotlib.patches import Ellipse, Rectangle
 import math
 
@@ -80,10 +78,6 @@ class MidiPlayback(QFrame):
         self.playhead_pos = 0.0
         self.playhead_speed = 1.0  # seconds of MIDI time per real second
 
-
-    def load_midi(self, midi_file): 
-        pass # TODO: will add later ;) for now just used set_notes with hardcoded notes for testing
-    
     def stop_loader(self):
         self.loader_timer.stop()
         self.blobs.clear()
