@@ -7,6 +7,11 @@ block_cipher = None
 # --- PySide6 ---
 pyside6_datas, pyside6_binaries, pyside6_hidden = collect_all("PySide6")
 
+pyside6_datas = [
+    d for d in pyside6_datas
+    if "WebEngine" not in d[0]
+]
+
 pyside6_hidden = [
     x for x in pyside6_hidden
     if "WebEngine" not in x
@@ -42,6 +47,7 @@ a = Analysis(
         "PySide6.QtWidgets",
         "PySide6.QtMultimedia",
 
+        "pyaudio",
         "sounddevice",
         "soundfile",
         "mido",
@@ -49,11 +55,20 @@ a = Analysis(
         "scipy",
         "librosa",
         "numba",
+        "numba.core",
+        "numba.core.types",
+        "numba.core.typing",
+        "numba.core.dispatcher",
+        "numba.np",
+        "numba.np.numpy_support",
         "llvmlite",
+        "llvmlite.binding",
         "sklearn",
         "joblib",
         "cffi",
         "pydub",
+        "matplotlib",
+        "matplotlib.backends.backend_qtagg",
     ],
 
     excludes=[
@@ -61,6 +76,10 @@ a = Analysis(
         "PyQt6",
         "tkinter",
         "_tkinter",
+        "PySide6.QtWebEngine",
+        "PySide6.QtWebEngineCore",
+        "PySide6.QtWebEngineWidgets",
+        "PySide6.QtWebEngineQuick",
     ],
     runtime_hooks=["rthooks/qt_patch.py"],
     noarchive=False,
@@ -78,6 +97,7 @@ exe = EXE(
     name="harmonize",
     debug=False,
     console=False,
+    upx=False
 )
 
 app = BUNDLE(

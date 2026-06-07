@@ -39,12 +39,27 @@ def convert_to_midi(wave_output_file, midi_output, silence_threshold=-40.0):
         fmax = float(librosa.note_to_hz('C7'))
         
         try:
+            print("Attempting librosa.pyin...")
             pitches, voiced_flags, _ = librosa.pyin(signal, fmin=fmin, fmax=fmax, sr=sr) #voiced_flags is boolean -> noise vs silence. _ is confidence level of the pitch estimation
+            print("Successfully used librosa.pyin")
         except Exception as pyin_error:
-            print(f"ERROR in librosa.pyin: {pyin_error}")
-            print(f"Signal shape: {signal.shape}, SR: {sr}")
-            print(f"NUMBA_DISABLE_JIT env var: {os.environ.get('NUMBA_DISABLE_JIT', 'NOT SET')}")
-            raise
+            print(f"librosa.pyin failed: {pyin_error}")
+            print(f"Attempting fallback with librosa.piptrack...")
+            try:
+                # fallback to piptrack which is more compatible
+                pitches = librosa.piptrack(y=signal, sr=sr, fmin=fmin, fmax=fmax, threshold=0.1)
+                # get the maximum pitch for each frame
+                pitches = np.max(pitches, axis=0)
+                # Set voiced_flags based on whether pitch was detected
+                voiced_flags = pitches > 0
+                print("Successfully used librosa.piptrack as fallback")
+            except Exception as piptrack_error:
+                print(f"Both pyin and piptrack failed!")
+                print(f"pyin error: {pyin_error}")
+                print(f"piptrack error: {piptrack_error}")
+                print(f"Signal shape: {signal.shape}, SR: {sr}")
+                print(f"NUMBA_DISABLE_JIT env var: {os.environ.get('NUMBA_DISABLE_JIT', 'NOT SET')}")
+                raise
         
         midi_file = MidiFile()
         track = MidiTrack()
