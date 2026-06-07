@@ -13,6 +13,7 @@ from midi import convert_to_midi
 from midi_playback import MidiPlayback
 from playback import playAudio
 import sys
+import res_rc
 
 
 class ConvertWorker(QThread):

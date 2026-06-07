@@ -40,7 +40,6 @@ pytest==9.0.3
 python-dateutil==2.9.0.post0
 requests==2.34.2
 scikit-learn==1.8.0
-scipy==1.17.1
 shiboken6==6.7.2
 six==1.17.0
 sounddevice==0.5.5
