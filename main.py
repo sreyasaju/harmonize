@@ -200,6 +200,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _on_conversion_done(self, notes):
             self.midi_player.set_notes(notes)
+
+            self.midi_player.reset_playhead()          
+            self.midi_is_playing = False
+
             self.validate_inputs()
 
             msg = QMessageBox(self)
@@ -215,22 +219,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.validate_inputs()
         
     def play_midi_action(self):
-        # Ensure a MIDI output file exists on disk
         if self.midi_output_file and os.path.exists(self.midi_output_file):
             if self.midi_is_playing:
-                # Pause MIDI playback (UI-only toggle for now)
                 self.midi_is_playing = False
                 self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/play.svg"))
                 self.playmidiButton.setText("PLAY MIDI")
+                self.midi_player.stop_playhead() 
                 self.update_status_bar("MIDI Playback paused")
             else:
-                # Start MIDI playback (UI-only toggle for now)
                 self.midi_is_playing = True
                 self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/pause.svg"))
                 self.playmidiButton.setText("PAUSE MIDI")
+                self.midi_player.start_playhead() 
                 self.update_status_bar(f"MIDI Playback playing {self.midi_output_file}")
         else:
-            self.show_error_message("No MIDI file to play!")
+            self.show_error_message("No MIDI file to play!") 
         self.validate_inputs()
 
 
