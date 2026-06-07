@@ -64,6 +64,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.audio_player = None
         self.midi_is_playing = False
 
+        self.midi_audio_player = None
+        self._rendered_wav = None
+
+
         self.recordButton.setEnabled(False)
         self.playButton.setEnabled(False)
         self.convertButton.setEnabled(False)
@@ -200,20 +204,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.show_error_message(f"Error duing MIDI conversion: {str(e)}")
 
     def _on_conversion_done(self, notes):
-            self._rendered_wav = None        # force re-render for new MIDI
-            self.midi_audio_player = None    # reset player 
-            self.midi_player.set_notes(notes)
-            self.midi_player.reset_playhead()
-            self.midi_is_playing = False
+        self._rendered_wav = None
+        if self.midi_audio_player is not None:
+            self.midi_audio_player.stop()
+            self.midi_audio_player = None
+        self.midi_player.set_notes(notes)
+        self.midi_player.reset_playhead()
+        self.midi_is_playing = False
+        self.validate_inputs()
 
-            self.validate_inputs()
+        msg = QMessageBox(self)
+        msg.setWindowTitle("MIDI Conversion Success!")
+        msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
+        msg.setIconPixmap(QtGui.QPixmap(":/icons/ui/icons/convert.svg"))
+        msg.exec()
+        self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
 
-            msg = QMessageBox(self)
-            msg.setWindowTitle("MIDI Conversion Success!")
-            msg.setText(f"Converted MIDI saved to {self.midi_output_file}. Listen to it in your favorite audio editor!")
-            msg.setIconPixmap(QtGui.QPixmap(":/icons/ui/icons/convert.svg"))
-            msg.exec()
-            self.update_status_bar(f"Converted MIDI saved to {self.midi_output_file}")
+        self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/play.svg"))
+        self.playmidiButton.setText("PLAY MIDI")
 
     def _on_conversion_error(self, error_msg):
         self.midi_player.stop_loader()      # clean up loader on error too
@@ -221,37 +229,56 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.validate_inputs()
         
     def play_midi_action(self):
-        if self.midi_output_file and os.path.exists(self.midi_output_file):
-            if self.midi_is_playing:
-                self.midi_is_playing = False
-                self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/play.svg"))
-                self.playmidiButton.setText("PLAY MIDI")
-                self.midi_player.stop_playhead() 
-                self.update_status_bar("MIDI Playback paused")
-            else:
-                self.midi_is_playing = True
-                self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/pause.svg"))
-                self.playmidiButton.setText("PAUSE MIDI")
-                self.midi_player.start_playhead() 
+        if not (self.midi_output_file and os.path.exists(self.midi_output_file)):
+            self.show_error_message("No MIDI file to play!")
+            self.validate_inputs()
+            return
 
-                # render of first play resuse on resume
+        # render WAV once per MIDI file
+        if self._rendered_wav is None:
+            try:
+                from midi_playback import render_midi_to_wav, AudioPlayer
+                self._rendered_wav = render_midi_to_wav(self.midi_output_file)
+                if self._rendered_wav is None:
+                    self.show_error_message("Failed to render MIDI audio.")
+                    return
+            except Exception as e:
+                self.show_error_message(f"Failed to render MIDI audio: {e}")
+                return
 
-                if not hasattr(self, '_rendered_wav') or self._rendered_wav is None:
-                    try:
-                        from midi_playback import render_midi_to_wav
-                        self._rendered_wav = render_midi_to_wav(self.midi_output_file)
-                    except Exception as e:
-                        self.show_error_message(f"Failed to render MIDI audio: {e}")
-                        self.midi_is_playing = False
-                        return
-                
-                if self.midi_audio_player is None:
-                    self.midi_audio_player = playAudio(self._rendered_wav)
-                self.midi_audio_player.play()
-                self.update_status_bar(f"MIDI Playback playing {self.midi_output_file}")
+        # init AudioPlayer once per rendered WAV
+        if self.midi_audio_player is None:
+            from midi_playback import AudioPlayer
+            self.midi_audio_player = AudioPlayer()
+            self.midi_audio_player.load(self._rendered_wav)
+
+        if self.midi_is_playing:
+            # --- PAUSE ---
+            self.midi_is_playing = False
+            self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/play.svg"))
+            self.playmidiButton.setText("PLAY MIDI")
+            self.midi_player.stop_playhead()
+            self.midi_audio_player.pause()
+            self.update_status_bar("MIDI Playback paused")
         else:
-            self.show_error_message("No MIDI file to play!") 
-        self.validate_inputs()
+            # --- PLAY / RESUME ---
+            
+            if self.midi_audio_player._stream is None or self.midi_audio_player._finished:
+                # first play OR finished — restart from top
+                self.midi_audio_player.stop()
+                self.midi_audio_player.load(self._rendered_wav)
+                self.midi_audio_player.play()
+                self.midi_player.reset_playhead()
+            else:
+                self.midi_audio_player.resume() # resume after pause
+            self.midi_player.start_playhead()
+
+            self.midi_is_playing = True
+            self.playmidiButton.setIcon(QtGui.QIcon(":/icons/ui/icons/pause.svg"))
+            self.playmidiButton.setText("PAUSE MIDI")
+            self.update_status_bar(f"MIDI Playback playing {self.midi_output_file}")
+
+            self.validate_inputs()
 
 
     def git_url_action(self):
