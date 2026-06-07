@@ -75,5 +75,5 @@ SOFTWARE.
 ```
 
 <hr>
-Copyright © 2024-26 Sreya Saju
+Copyright © 2024-2026 Sreya Saju
 
