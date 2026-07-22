@@ -19,7 +19,7 @@ msgpack==1.2.1
 numba==0.65.1
 numpy==1.26.4
 packaging==23.2
-pillow==12.2.0
+pillow==12.3.0
 platformdirs==4.9.6
 pluggy==1.6.0
 pooch==1.9.0
